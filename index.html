@@ -20,15 +20,14 @@
             color: #260808; /* Graphite */
         }
 
-        /* Container that allows vertical scrolling after reveal */
+        /* Scrolling locked until landing text is clicked */
         .main-scroll-container {
             width: 100%;
             height: 100%;
-            overflow-y: hidden; /* Locked until RALLI is clicked */
+            overflow-y: hidden;
             scroll-behavior: smooth;
         }
 
-        /* Full viewport sections */
         .section-view {
             width: 100%;
             height: 100vh;
@@ -44,10 +43,6 @@
         /* ----------------------------------
            SECTION 1: LANDING & DASHBOARD
         ---------------------------------- */
-        #landing-view {
-            overflow: hidden;
-        }
-
         #brand-logo {
             font-size: 5.5rem;
             font-weight: 500;
@@ -56,23 +51,26 @@
             margin: 0;
             cursor: pointer;
             user-select: none;
-            transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+            opacity: 1;
+            transition: opacity 0.5s ease, transform 0.5s ease;
         }
 
-        /* Shifts the title up when tapped */
-        #brand-logo.shifted {
-            transform: translateY(-40px);
+        /* Completely hides RALLI. when clicked */
+        #brand-logo.hidden {
+            opacity: 0;
+            transform: scale(0.95);
+            pointer-events: none;
+            position: absolute; /* Takes it out of layout space so menu takes center stage */
         }
 
-        /* The 3 circle icons row */
+        /* Elegant SQUARE grid layout for navigation icons */
         .icon-menu-row {
             display: flex;
             gap: 40px;
-            margin-top: 20px;
             opacity: 0;
             transform: translateY(20px);
             pointer-events: none;
-            transition: opacity 0.8s ease, transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+            transition: opacity 0.8s ease 0.2s, transform 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.2s;
         }
 
         .icon-menu-row.visible {
@@ -85,24 +83,25 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
             text-decoration: none;
             color: #260808;
             cursor: pointer;
         }
 
-        .icon-circle {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
+        /* Modified into a minimalist square card layout */
+        .icon-square {
+            width: 100px;
+            height: 100px;
+            border-radius: 0px; /* Force sharp square corners */
             border: 1px solid rgba(38, 8, 8, 0.25);
             background-color: #F3E6BD;
             overflow: hidden;
-            box-shadow: 0 10px 25px rgba(38, 8, 8, 0.06);
+            box-shadow: 0 10px 25px rgba(38, 8, 8, 0.04);
             transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.4s ease;
         }
 
-        .icon-circle img {
+        .icon-square img {
             width: 100%;
             height: 100%;
             object-fit: cover;
@@ -119,19 +118,20 @@
             transition: opacity 0.3s ease;
         }
 
-        .icon-wrapper:hover .icon-circle {
-            transform: scale(1.06);
+        /* Square hover responses */
+        .icon-wrapper:hover .icon-square {
+            transform: scale(1.05);
             border-color: #260808;
         }
-        .icon-wrapper:hover .icon-circle img {
-            transform: scale(1.1);
+        .icon-wrapper:hover .icon-square img {
+            transform: scale(1.08);
         }
         .icon-wrapper:hover .icon-label {
             opacity: 1;
             font-weight: 500;
         }
 
-        /* Scroll prompt text */
+        /* Clear, minimal hint showing the user they can now slide down */
         .scroll-prompt {
             position: absolute;
             bottom: 30px;
@@ -141,7 +141,7 @@
             letter-spacing: 3px;
             opacity: 0;
             transform: translateY(10px);
-            transition: opacity 1s ease 0.5s, transform 1s ease 0.5s;
+            transition: opacity 1s ease 0.6s, transform 1s ease 0.6s;
         }
         .scroll-prompt.visible {
             opacity: 0.5;
@@ -149,11 +149,11 @@
         }
 
         /* ----------------------------------
-           SECTION 2: PLAY GAME AREA
+           SECTION 2: SCROLL DOWN PLAY GAME
         ---------------------------------- */
         #game-view {
-            background-color: #ebdcb2; /* Subtle deeper tone */
-            border-top: 1px solid rgba(38, 8, 8, 0.05);
+            background-color: #ebdcb2; /* Deeper background tone change */
+            border-top: 1px solid rgba(38, 8, 8, 0.04);
         }
 
         .game-title {
@@ -168,19 +168,13 @@
             width: 100%;
             max-width: 650px;
             height: 450px;
-            border-radius: 4px;
-            background-color: rgba(38, 8, 8, 0.03);
+            background-color: rgba(38, 8, 8, 0.02);
             border: 1px solid rgba(38, 8, 8, 0.15);
-            box-shadow: 0 20px 45px rgba(38, 8, 8, 0.1);
+            box-shadow: 0 20px 45px rgba(38, 8, 8, 0.08);
             display: flex;
             justify-content: center;
             align-items: center;
             overflow: hidden;
-            transition: transform 0.5s ease;
-        }
-
-        .game-display-box:hover {
-            transform: scale(1.01);
         }
 
         .game-display-box img {
@@ -192,7 +186,7 @@
         @media (max-width: 768px) {
             #brand-logo { font-size: 3.5rem; }
             .icon-menu-row { gap: 20px; }
-            .icon-circle { width: 65px; height: 65px; }
+            .icon-square { width: 80px; height: 80px; }
             .game-display-box { height: 320px; max-width: 90%; }
         }
     </style>
@@ -201,32 +195,32 @@
 
     <div class="main-scroll-container" id="scroll-wrapper">
         
-        <!-- SECTION 1: Welcome Splash & Navigation Dashboard -->
+        <!-- SECTION 1: Welcome Screen & Post-Click Icons -->
         <div class="section-view" id="landing-view">
             
             <h1 id="brand-logo" onclick="revealDashboard()">RALLI.</h1>
 
             <div class="icon-menu-row" id="menu-row">
-                <!-- Icon 1 -->
+                <!-- Icon 1: Journey -->
                 <div class="icon-wrapper">
-                    <div class="icon-circle">
-                        <img src="icon1.jpg" alt="Our Journey">
+                    <div class="icon-square">
+                        <img src="icon1.jpg" alt="Journey">
                     </div>
                     <span class="icon-label">journey</span>
                 </div>
 
-                <!-- Icon 2: Your Role (Mehndi Image) -->
+                <!-- Icon 2: Your Role -->
                 <div class="icon-wrapper">
-                    <div class="icon-circle">
+                    <div class="icon-square">
                         <img src="icon-role.jpg" alt="Your Role">
                     </div>
                     <span class="icon-label">your role</span>
                 </div>
 
-                <!-- Icon 3: Concept Design -->
+                <!-- Icon 3: Concept -->
                 <div class="icon-wrapper">
-                    <div class="icon-circle">
-                        <img src="icon3.jpg" alt="Concept View">
+                    <div class="icon-square">
+                        <img src="icon3.jpg" alt="Concept">
                     </div>
                     <span class="icon-label">concept</span>
                 </div>
@@ -235,12 +229,13 @@
             <div class="scroll-prompt" id="scroll-hint">↓ Scroll to play game</div>
         </div>
 
-        <!-- SECTION 2: Interactive Game Block -->
+        <!-- SECTION 2: Scroll Content Area -->
         <div class="section-view" id="game-view">
             <h2 class="game-title">Play Game</h2>
             
             <div class="game-display-box">
-                <img src="journey-sketch.jpg" alt="Ralli Core Interface View">
+                <!-- The image rendered when scrolling all the way down -->
+                <img src="journey-sketch.jpg" alt="Ralli Interactive Showcase Frame">
             </div>
         </div>
 
@@ -253,12 +248,14 @@
             const menuRow = document.getElementById('menu-row');
             const scrollHint = document.getElementById('scroll-hint');
 
-            // Shift logo up and show menu elements
-            logo.classList.add('shifted');
+            // 1. Instantly vanish the logo completely
+            logo.classList.add('hidden');
+            
+            // 2. Bring up the square dashboard selections immediately 
             menuRow.classList.add('visible');
             scrollHint.classList.add('visible');
 
-            // Unlock vertical scrolling on the page
+            // 3. Unlocks user container scrolling
             scrollWrapper.style.overflowY = 'auto';
         }
     </script>
