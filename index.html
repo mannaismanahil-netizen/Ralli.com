@@ -6,40 +6,42 @@
     <title>RALLI</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=Montserrat:wght@300;400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
     
     <style>
         body, html {
             margin: 0;
             padding: 0;
             width: 100%;
+            height: 100%;
             background-color: #F3E6BD; /* Pearl Beige */
             font-family: 'Playfair Display', Georgia, serif;
             -webkit-font-smoothing: antialiased;
             color: #260808; /* Graphite */
+        }
+
+        .main-scroll-container {
+            width: 100%;
+            height: 100%;
+            overflow-y: hidden;
             scroll-behavior: smooth;
         }
 
-        /* Viewport blocks for snapping sections */
         .section-view {
             width: 100%;
-            min-height: 100vh;
+            height: 100vh;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             box-sizing: border-box;
-            padding: 40px 20px;
+            padding: 20px;
             position: relative;
         }
 
         /* ----------------------------------
            SECTION 1: LANDING & DASHBOARD
         ---------------------------------- */
-        #landing-view {
-            overflow: hidden;
-        }
-
         #brand-logo {
             font-size: 5.5rem;
             font-weight: 500;
@@ -48,23 +50,28 @@
             margin: 0;
             cursor: pointer;
             user-select: none;
-            transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1), font-size 0.8s ease;
+            opacity: 1;
+            transition: opacity 0.4s ease, transform 0.4s ease;
         }
 
-        /* Shifts the main title up when tapped */
-        #brand-logo.shifted {
-            transform: translateY(-40px);
+        #brand-logo.hidden {
+            opacity: 0;
+            transform: scale(0.95);
+            pointer-events: none;
+            position: absolute;
         }
 
-        /* Icon layout that drops down under title */
+        /* Large horizontal row taking up most of the screen width */
         .icon-menu-row {
             display: flex;
-            gap: 40px;
-            margin-top: 20px;
+            width: 90%;
+            max-width: 1400px;
+            justify-content: center;
+            gap: 5%;
             opacity: 0;
-            transform: translateY(20px);
+            transform: translateY(30px);
             pointer-events: none;
-            transition: opacity 0.8s ease, transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+            transition: opacity 0.8s ease 0.1s, transform 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.1s;
         }
 
         .icon-menu-row.visible {
@@ -77,75 +84,78 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 10px;
+            gap: 20px;
+            flex: 1;
+            max-width: 380px; /* Limits maximum scaling on giant desktop displays */
             text-decoration: none;
             color: #260808;
             cursor: pointer;
         }
 
-        .icon-circle {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            border: 1px solid rgba(38, 8, 8, 0.25);
-            background-color: #F3E6BD;
+        /* MASSIVE SQUARES: Responsive sizing based on viewport width */
+        .icon-square {
+            width: 100%;
+            aspect-ratio: 1 / 1; /* Maintains a perfect sharp square dynamically */
+            border: 1px solid rgba(38, 8, 8, 0.2);
+            background-color: rgba(38, 8, 8, 0.02);
             overflow: hidden;
-            box-shadow: 0 10px 25px rgba(38, 8, 8, 0.06);
-            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.4s ease;
+            box-shadow: 0 15px 35px rgba(38, 8, 8, 0.05);
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.4s ease, box-shadow 0.4s ease;
         }
 
-        .icon-circle img {
+        .icon-square img {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            transition: transform 0.4s ease;
+            transition: transform 0.5s ease;
         }
 
         .icon-label {
             font-family: 'Montserrat', sans-serif;
-            font-size: 0.75rem;
+            font-size: 0.9rem;
             font-weight: 400;
             text-transform: lowercase;
-            letter-spacing: 1px;
-            opacity: 0.8;
-            transition: opacity 0.3s ease;
+            letter-spacing: 2px;
+            opacity: 0.7;
+            transition: opacity 0.3s ease, letter-spacing 0.3s ease;
         }
 
-        .icon-wrapper:hover .icon-circle {
-            transform: scale(1.06);
+        /* Hover interactions */
+        .icon-wrapper:hover .icon-square {
+            transform: translateY(-8px) scale(1.02);
             border-color: #260808;
+            box-shadow: 0 25px 50px rgba(38, 8, 8, 0.1);
         }
-        .icon-wrapper:hover .icon-circle img {
-            transform: scale(1.1);
+        .icon-wrapper:hover .icon-square img {
+            transform: scale(1.05);
         }
         .icon-wrapper:hover .icon-label {
             opacity: 1;
-            font-weight: 500;
+            letter-spacing: 3px;
         }
 
-        /* Subtle scroll prompt text */
         .scroll-prompt {
             position: absolute;
-            bottom: 30px;
+            bottom: 35px;
             font-family: 'Montserrat', sans-serif;
-            font-size: 0.7rem;
+            font-size: 0.75rem;
             text-transform: uppercase;
-            letter-spacing: 3px;
+            letter-spacing: 4px;
             opacity: 0;
             transform: translateY(10px);
-            transition: opacity 1s ease 0.5s, transform 1s ease 0.5s;
+            transition: opacity 1s ease 0.6s, transform 1s ease 0.6s;
         }
         .scroll-prompt.visible {
-            opacity: 0.5;
+            opacity: 0.4;
             transform: translateY(0);
         }
 
         /* ----------------------------------
-           SECTION 2: PLAY GAME AREA
+           SECTION 2: SCROLL DOWN PLAY GAME
         ---------------------------------- */
         #game-view {
-            background-color: #ebdcb2; /* Slightly darker shift for section depth */
-            border-top: 1px solid rgba(38, 8, 8, 0.05);
+            background-color: #ebdcb2;
+            border-top: 1px solid rgba(38, 8, 8, 0.04);
         }
 
         .game-title {
@@ -158,12 +168,11 @@
 
         .game-display-box {
             width: 100%;
-            max-width: 650px;
-            height: 450px;
-            border-radius: 2px;
-            background-color: rgba(38, 8, 8, 0.03);
+            max-width: 750px;
+            height: 500px;
+            background-color: rgba(38, 8, 8, 0.02);
             border: 1px solid rgba(38, 8, 8, 0.15);
-            box-shadow: 0 20px 45px rgba(38, 8, 8, 0.1);
+            box-shadow: 0 20px 45px rgba(38, 8, 8, 0.08);
             display: flex;
             justify-content: center;
             align-items: center;
@@ -178,67 +187,73 @@
 
         @media (max-width: 768px) {
             #brand-logo { font-size: 3.5rem; }
-            .icon-menu-row { gap: 20px; }
-            .icon-circle { width: 65px; height: 65px; }
-            .game-display-box { height: 320px; }
+            .icon-menu-row { width: 95%; gap: 15px; }
+            .icon-label { font-size: 0.75rem; }
+            .game-display-box { height: 320px; max-width: 90%; }
         }
     </style>
 </head>
 <body>
 
-    <!-- SECTION 1: Welcome Splash & Navigation Dashboard -->
-    <div class="section-view" id="landing-view">
+    <div class="main-scroll-container" id="scroll-wrapper">
         
-        <h1 id="brand-logo" onclick="revealDashboard()">RALLI.</h1>
+        <!-- SECTION 1: Welcome Screen -->
+        <div class="section-view" id="landing-view">
+            
+            <h1 id="brand-logo" onclick="revealDashboard()">RALLI.</h1>
 
-        <div class="icon-menu-row" id="menu-row">
-            <!-- Icon 1: Journey -->
-            <div class="icon-wrapper">
-                <div class="icon-circle">
-                    <img src="icon1.jpg" alt="Our Journey">
+            <div class="icon-menu-row" id="menu-row">
+                <!-- Icon 1: Journey -->
+                <div class="icon-wrapper">
+                    <div class="icon-square">
+                        <img src="icon1.jpeg" alt="Journey">
+                    </div>
+                    <span class="icon-label">journey</span>
                 </div>
-                <span class="icon-label">journey</span>
+
+                <!-- Icon 2: Your Role -->
+                <div class="icon-wrapper">
+                    <div class="icon-square">
+                        <img src="icon2.jpeg" alt="Your Role">
+                    </div>
+                    <span class="icon-label">your role</span>
+                </div>
+
+                <!-- Icon 3: Concept -->
+                <div class="icon-wrapper">
+                    <div class="icon-square">
+                        <img src="icon3.jpg" alt="Concept">
+                    </div>
+                    <span class="icon-label">concept</span>
+                </div>
             </div>
 
-            <!-- Icon 2: Your Role -->
-            <div class="icon-wrapper">
-                <div class="icon-circle">
-                    <img src="icon-role.jpg" alt="Your Role">
-                </div>
-                <span class="icon-label">your role</span>
-            </div>
+            <div class="scroll-prompt" id="scroll-hint">↓ Scroll to play game</div>
+        </div>
 
-            <!-- Icon 3: Concept Design -->
-            <div class="icon-wrapper">
-                <div class="icon-circle">
-                    <img src="icon3.jpg" alt="Concept View">
-                </div>
-                <span class="icon-label">concept</span>
+        <!-- SECTION 2: Scroll Content Area -->
+        <div class="section-view" id="game-view">
+            <h2 class="game-title">Play Game</h2>
+            
+            <div class="game-display-box">
+                <img src="journey-sketch.jpg" alt="Ralli Interactive Showcase Frame">
             </div>
         </div>
 
-        <div class="scroll-prompt" id="scroll-hint">↓ Scroll to play game</div>
-    </div>
-
-    <!-- SECTION 2: Interactive Game Block -->
-    <div class="section-view" id="game-view">
-        <h2 class="game-title">Play Game</h2>
-        
-        <div class="game-display-box">
-            <!-- Automatically loads your sketch collection here -->
-            <img src="journey-sketch.jpg" alt="Ralli Core Interface View">
-        </div>
     </div>
 
     <script>
         function revealDashboard() {
+            const scrollWrapper = document.getElementById('scroll-wrapper');
             const logo = document.getElementById('brand-logo');
             const menuRow = document.getElementById('menu-row');
             const scrollHint = document.getElementById('scroll-hint');
 
-            logo.classList.add('shifted');
+            logo.classList.add('hidden');
             menuRow.classList.add('visible');
             scrollHint.classList.add('visible');
+
+            scrollWrapper.style.overflowY = 'auto';
         }
     </script>
 
