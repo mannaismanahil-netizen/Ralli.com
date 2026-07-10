@@ -20,6 +20,7 @@
             color: #260808; /* Graphite */
         }
 
+        /* Scrolling locked until landing text is clicked */
         .main-scroll-container {
             width: 100%;
             height: 100%;
@@ -29,25 +30,40 @@
 
         .section-view {
             width: 100%;
-            height: 100vh;
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             box-sizing: border-box;
-            padding: 20px;
+            padding: 40px 20px;
             position: relative;
         }
 
         /* ----------------------------------
            SECTION 1: LANDING & DASHBOARD
         ---------------------------------- */
+        /* Center container explicitly for the logo */
+        .logo-center-container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            text-align: center;
+            z-index: 10;
+        }
+
         #brand-logo {
             font-size: 5.5rem;
             font-weight: 500;
             letter-spacing: 6px;
             text-transform: uppercase;
             margin: 0;
+            padding: 0;
             cursor: pointer;
             user-select: none;
             opacity: 1;
@@ -58,12 +74,12 @@
             opacity: 0;
             transform: scale(0.95);
             pointer-events: none;
-            position: absolute;
         }
 
-        /* Expanded container to take up maximum screen width */
+        /* Desktop Layout: Perfect row */
         .icon-menu-row {
             display: flex;
+            flex-direction: row;
             width: 96%;
             max-width: 1600px;
             justify-content: center;
@@ -86,13 +102,12 @@
             align-items: center;
             gap: 20px;
             flex: 1;
-            max-width: 440px; /* Increased max width to make them significantly larger */
+            max-width: 440px; 
             text-decoration: none;
             color: #260808;
             cursor: pointer;
         }
 
-        /* Perfect sharp squares scaling up dynamically */
         .icon-square {
             width: 100%;
             aspect-ratio: 1 / 1;
@@ -119,7 +134,7 @@
             transition: opacity 0.3s ease, letter-spacing 0.3s ease;
         }
 
-        /* Interactive movements */
+        /* Hover interactions */
         .icon-wrapper:hover .icon-square {
             transform: translateY(-8px) scale(1.02);
             border-color: #260808;
@@ -184,10 +199,41 @@
             object-fit: cover;
         }
 
+        /* ----------------------------------
+           MOBILE RESPONSIVENESS OVERRIDES
+        ---------------------------------- */
         @media (max-width: 768px) {
             #brand-logo { font-size: 3.5rem; }
-            .icon-menu-row { width: 95%; gap: 15px; }
-            .icon-label { font-size: 0.75rem; }
+            
+            /* Allow view block to stretch for stacked scrolling icons */
+            #landing-view {
+                height: auto;
+                min-height: 100vh;
+                padding-top: 60px;
+                padding-bottom: 100px;
+            }
+
+            /* Stack one icon after another vertically on mobile */
+            .icon-menu-row {
+                flex-direction: column;
+                align-items: center;
+                width: 90%;
+                gap: 50px; /* Generous gap between blocks */
+            }
+
+            /* Make icons large, taking roughly half the viewport height */
+            .icon-wrapper {
+                width: 100%;
+                max-width: 85vw;
+            }
+
+            .icon-square {
+                width: 100%;
+                height: 45vh; /* Covers almost half the phone screen */
+                aspect-ratio: auto; /* Allow non-perfect square if needed to meet height requirements */
+            }
+
+            .icon-label { font-size: 0.85rem; }
             .game-display-box { height: 320px; max-width: 90%; }
         }
     </style>
@@ -199,7 +245,10 @@
         <!-- SECTION 1: Welcome Screen -->
         <div class="section-view" id="landing-view">
             
-            <h1 id="brand-logo" onclick="revealDashboard()">RALLI.</h1>
+            <!-- Explicitly Centered Header Wrap -->
+            <div class="logo-center-container" id="logo-wrap">
+                <h1 id="brand-logo" onclick="revealDashboard()">RALLI.</h1>
+            </div>
 
             <div class="icon-menu-row" id="menu-row">
                 <!-- Icon 1: Journey -->
@@ -210,7 +259,7 @@
                     <span class="icon-label">Journey</span>
                 </div>
 
-                <!-- Icon 2: Concept (Shifted to Middle) -->
+                <!-- Icon 2: Concept -->
                 <div class="icon-wrapper">
                     <div class="icon-square">
                         <img src="icon3.jpg" alt="Concept">
@@ -245,10 +294,17 @@
         function revealDashboard() {
             const scrollWrapper = document.getElementById('scroll-wrapper');
             const logo = document.getElementById('brand-logo');
+            const logoWrap = document.getElementById('logo-wrap');
             const menuRow = document.getElementById('menu-row');
             const scrollHint = document.getElementById('scroll-hint');
 
             logo.classList.add('hidden');
+            
+            // Remove the layout footprint of the centered logo block completely 
+            setTimeout(() => {
+                logoWrap.style.display = 'none';
+            }, 400);
+
             menuRow.classList.add('visible');
             scrollHint.classList.add('visible');
 
