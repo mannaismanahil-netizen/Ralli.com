@@ -4,10 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RALLI</title>
-    <!-- Importing a premium high-fashion editorial serif font -->
+    <!-- Premium editorial font -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,500;1,300&family=Montserrat:wght@300;400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,500;1,300&display=swap" rel="stylesheet">
     
     <style>
         body, html {
@@ -16,13 +16,11 @@
             height: 100%;
             width: 100%;
             overflow: hidden;
-            /* Using your stunning Pearl Beige for a clean, minimalist canvas */
-            background-color: #F3E6BD; 
+            background-color: #F3E6BD; /* Pearl Beige */
             font-family: 'Cormorant Garamond', Georgia, serif;
             -webkit-font-smoothing: antialiased;
         }
 
-        /* Centered Layout Box */
         .main-container {
             display: flex;
             justify-content: center;
@@ -30,76 +28,57 @@
             height: 100vh;
             width: 100%;
             text-align: center;
-            box-sizing: border-box;
-            padding: 20px;
         }
 
-        .text-wrapper {
-            animation: elegantFade 2s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        /* Welcome text in your exact deep Graphite color */
+        /* Sleek entry animation styling */
         h1 {
-            font-size: 3.2rem;
+            font-size: 4rem;
             font-weight: 300;
-            font-style: italic;
             color: #260808; /* Graphite */
             margin: 0;
-            line-height: 1.1;
+            line-height: 1;
+            white-space: nowrap;
+            
+            /* Applies the ultra-smooth luxury reveal effect */
+            animation: sleekReveal 2.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
 
-        /* Bold, clean uppercase brand line */
-        .brand {
-            font-style: normal;
+        .brand-name {
             font-weight: 500;
-            letter-spacing: 12px;
             text-transform: uppercase;
-            display: block;
-            font-size: 5.5rem;
-            margin-top: 5px;
-            color: #260808; /* Graphite */
         }
 
-        /* Contemporary clean sans-serif subtitle for balance */
-        .subtitle {
-            font-family: 'Montserrat', sans-serif;
-            font-size: 0.8rem;
-            font-weight: 300;
-            letter-spacing: 6px;
-            text-transform: uppercase;
-            color: #260808; /* Graphite */
-            margin-top: 35px;
-            opacity: 0.8;
-        }
-
-        /* Ultra-smooth crisp fade in */
-        @keyframes elegantFade {
-            from {
+        /* The sleek reveal effect: smooth fade, slight rise, and luxury letter expansion */
+        @keyframes sleekReveal {
+            0% {
                 opacity: 0;
-                transform: translateY(20px);
+                letter-spacing: -2px;
+                transform: translateY(15px);
             }
-            to {
+            30% {
+                opacity: 0.3;
+            }
+            100% {
                 opacity: 1;
+                letter-spacing: 3px;
                 transform: translateY(0);
             }
         }
 
-        /* Responsive adjustments for phones */
+        /* Responsive scaling for mobile devices */
         @media (max-width: 768px) {
-            h1 { font-size: 2.2rem; }
-            .brand { font-size: 3.5rem; letter-spacing: 6px; }
-            .subtitle { font-size: 0.7rem; letter-spacing: 4px; }
+            h1 { 
+                font-size: 2.2rem; 
+                white-space: normal;
+                line-height: 1.3;
+            }
         }
     </style>
 </head>
 <body>
 
     <div class="main-container">
-        <div class="text-wrapper">
-            <h1>welcome to</h1>
-            <span class="brand">RALLI</span>
-            <div class="subtitle">A Sustainable Design Concept</div>
-        </div>
+        <h1>Welcome to <span class="brand-name">RALLI</span>.</h1>
     </div>
 
 </body>
