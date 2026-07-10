@@ -61,13 +61,13 @@
             position: absolute;
         }
 
-        /* Large horizontal row taking up most of the screen width */
+        /* Expanded container to take up maximum screen width */
         .icon-menu-row {
             display: flex;
-            width: 90%;
-            max-width: 1400px;
+            width: 96%;
+            max-width: 1600px;
             justify-content: center;
-            gap: 5%;
+            gap: 4%;
             opacity: 0;
             transform: translateY(30px);
             pointer-events: none;
@@ -86,16 +86,16 @@
             align-items: center;
             gap: 20px;
             flex: 1;
-            max-width: 380px; /* Limits maximum scaling on giant desktop displays */
+            max-width: 440px; /* Increased max width to make them significantly larger */
             text-decoration: none;
             color: #260808;
             cursor: pointer;
         }
 
-        /* MASSIVE SQUARES: Responsive sizing based on viewport width */
+        /* Perfect sharp squares scaling up dynamically */
         .icon-square {
             width: 100%;
-            aspect-ratio: 1 / 1; /* Maintains a perfect sharp square dynamically */
+            aspect-ratio: 1 / 1;
             border: 1px solid rgba(38, 8, 8, 0.2);
             background-color: rgba(38, 8, 8, 0.02);
             overflow: hidden;
@@ -112,15 +112,14 @@
 
         .icon-label {
             font-family: 'Montserrat', sans-serif;
-            font-size: 0.9rem;
+            font-size: 0.95rem;
             font-weight: 400;
-            text-transform: lowercase;
             letter-spacing: 2px;
             opacity: 0.7;
             transition: opacity 0.3s ease, letter-spacing 0.3s ease;
         }
 
-        /* Hover interactions */
+        /* Interactive movements */
         .icon-wrapper:hover .icon-square {
             transform: translateY(-8px) scale(1.02);
             border-color: #260808;
@@ -208,23 +207,23 @@
                     <div class="icon-square">
                         <img src="icon1.jpeg" alt="Journey">
                     </div>
-                    <span class="icon-label">journey</span>
+                    <span class="icon-label">Journey</span>
                 </div>
 
-                <!-- Icon 2: Your Role -->
-                <div class="icon-wrapper">
-                    <div class="icon-square">
-                        <img src="icon2.jpeg" alt="Your Role">
-                    </div>
-                    <span class="icon-label">your role</span>
-                </div>
-
-                <!-- Icon 3: Concept -->
+                <!-- Icon 2: Concept (Shifted to Middle) -->
                 <div class="icon-wrapper">
                     <div class="icon-square">
                         <img src="icon3.jpg" alt="Concept">
                     </div>
-                    <span class="icon-label">concept</span>
+                    <span class="icon-label">Concept</span>
+                </div>
+
+                <!-- Icon 3: Your Role -->
+                <div class="icon-wrapper">
+                    <div class="icon-square">
+                        <img src="icon2.jpeg" alt="Your Role">
+                    </div>
+                    <span class="icon-label">Your Role</span>
                 </div>
             </div>
 
