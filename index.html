@@ -56,12 +56,9 @@
         }
 
         #brand-logo {
-            font-size: 5.5rem;
-            font-weight: 500;
-            letter-spacing: 6px;
-            text-transform: uppercase;
-            margin: 0;
-            padding: 0;
+            max-width: 320px;
+            width: 80%;
+            height: auto;
             cursor: pointer;
             user-select: none;
             opacity: 1;
@@ -223,7 +220,7 @@
             opacity: 0;
             visibility: hidden;
             transition: opacity 0.3s ease, visibility 0.3s ease;
-            background-color: #6b8e78; /* Updated to perfectly match your image background green */
+            background-color: #6b8e78; /* Clean design green backdrop */
         }
 
         .fullscreen-game-overlay.active {
@@ -246,7 +243,6 @@
             object-fit: contain; 
         }
 
-        /* Invisible clickable boxes layered over the design layout */
         .boxes-hitbox-overlay {
             position: absolute;
             bottom: 34%;
@@ -273,7 +269,6 @@
             background-color: rgba(255, 255, 255, 0.12);
         }
 
-        /* Fullscreen Controls Styling */
         .close-game-btn, .back-to-boxes-btn {
             position: absolute;
             background: rgba(38, 8, 8, 0.75);
@@ -322,7 +317,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            background-color: #6b8e78; /* Matches the green perfectly */
+            background-color: #6b8e78;
         }
 
         .box-result-screen.active {
@@ -336,7 +331,6 @@
             object-fit: contain;
         }
 
-        /* Entire window hit zone to easily click to proceed forward */
         .inner-item-hotspot {
             position: absolute;
             top: 0;
@@ -366,7 +360,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            background-color: #6b8e78; /* Matches the green perfectly */
+            background-color: #6b8e78;
         }
 
         .mannequin-workspace-screen.active {
@@ -381,10 +375,10 @@
         }
 
         /* ----------------------------------
-           MOBILE STACKED CONFIGURATION
+           MOBILE CONFIGURATION
         ---------------------------------- */
         @media (max-width: 768px) {
-            #brand-logo { font-size: 3.5rem; }
+            #brand-logo { max-width: 220px; }
             
             #landing-view {
                 height: auto;
@@ -422,11 +416,10 @@
 
     <div class="main-scroll-container" id="scroll-wrapper">
         
-        <!-- SECTION 1: Welcome Screen -->
         <div class="section-view" id="landing-view">
-            
             <div class="logo-center-container" id="logo-wrap">
-                <h1 id="brand-logo" onclick="revealDashboard()">RALLI.</h1>
+                <!-- Click directly swaps layout screens completely silently -->
+                <img id="brand-logo" src="logo.png" alt="RALLI Symbol" onclick="revealDashboard()">
             </div>
 
             <div class="icon-menu-row" id="menu-row">
@@ -455,7 +448,6 @@
             <div class="scroll-prompt" id="scroll-hint">↓ Scroll to play game</div>
         </div>
 
-        <!-- SECTION 2: Scroll Content Area -->
         <div class="section-view" id="game-view">
             <h2 class="game-title">Play Game</h2>
             
@@ -468,12 +460,11 @@
 
     </div>
 
-    <!-- STAGE 2: EDGE-TO-EDGE FULL SCREEN GRAPHIC PORTAL -->
+    <!-- OVERLAY PORTAL CONTAINER -->
     <div id="whole-screen-game" class="fullscreen-game-overlay">
         <button class="close-game-btn" id="close-game-trigger">✕ Close</button>
         <button class="back-to-boxes-btn" id="back-to-boxes-trigger" style="display: none;">← Back</button>
         
-        <!-- View Level 1: The Main Selection Collage -->
         <div class="collage-container" id="selection-collage-view">
             <img src="pickabox.jpeg" alt="Pick a Box Collage">
             
@@ -484,51 +475,17 @@
             </div>
         </div>
 
-        <!-- View Level 2: The Box Content Reveal -->
         <div class="box-result-screen" id="result-overlay">
             <img src="" id="result-img-frame" alt="Box Prize Content">
             <button class="inner-item-hotspot" id="box-contents-hotspot" title="Interact with box items"></button>
         </div>
 
-        <!-- View Level 3: Mannequin Canvas Studio -->
         <div class="mannequin-workspace-screen" id="mannequin-overlay">
             <img src="mannequin-view.png" alt="Mannequin Dress Studio Workspace">
         </div>
     </div>
 
     <script>
-        // Open-source direct audio links
-        const soundClick = new Audio('https://actions.google.com/sounds/v1/alarms/digital_watch_alarm_long.ogg');
-        const soundReveal = new Audio('https://actions.google.com/sounds/v1/foley/crumple_paper.ogg');
-        const soundSwish = new Audio('https://actions.google.com/sounds/v1/cartoon/slide_whistle_up.ogg');
-
-        soundClick.preload = 'auto';
-        soundReveal.preload = 'auto';
-        soundSwish.preload = 'auto';
-
-        function playSFX(audioTrack, trackName = "Audio") {
-            audioTrack.currentTime = 0;
-            audioTrack.play()
-                .then(() => console.log(`${trackName} played.`))
-                .catch(e => console.warn(`🔊 Audio playback paused waiting for manual user screen tap.`, e.message));
-        }
-
-        function revealDashboard() {
-            playSFX(soundClick, "Click");
-            const scrollWrapper = document.getElementById('scroll-wrapper');
-            const logo = document.getElementById('brand-logo');
-            const logoWrap = document.getElementById('logo-wrap');
-            const menuRow = document.getElementById('menu-row');
-            const scrollHint = document.getElementById('scroll-hint');
-
-            logo.classList.add('hidden');
-            setTimeout(() => { logoWrap.style.display = 'none'; }, 400);
-
-            menuRow.classList.add('visible');
-            scrollHint.classList.add('visible');
-            scrollWrapper.style.overflowY = 'auto';
-        }
-
         let currentDepthStage = 1; 
 
         const mainScrollContainer = document.getElementById('scroll-wrapper');
@@ -546,8 +503,22 @@
         const btnMid = document.getElementById('btn-mid');
         const btnRight = document.getElementById('btn-right');
 
+        function revealDashboard() {
+            const scrollWrapper = document.getElementById('scroll-wrapper');
+            const logo = document.getElementById('brand-logo');
+            const logoWrap = document.getElementById('logo-wrap');
+            const menuRow = document.getElementById('menu-row');
+            const scrollHint = document.getElementById('scroll-hint');
+
+            logo.classList.add('hidden');
+            setTimeout(() => { logoWrap.style.display = 'none'; }, 400);
+
+            menuRow.classList.add('visible');
+            scrollHint.classList.add('visible');
+            scrollWrapper.style.overflowY = 'auto';
+        }
+
         startGameTrigger.addEventListener('click', () => {
-            playSFX(soundSwish, "Swish");
             wholeScreenGame.classList.add('active');
             mainScrollContainer.style.overflowY = 'hidden';
             currentDepthStage = 1;
@@ -555,7 +526,6 @@
         });
 
         function displayBoxPrize(imgSrc) {
-            playSFX(soundReveal, "Reveal");
             resultImgFrame.src = imgSrc;
             resultOverlay.classList.add('active');
             currentDepthStage = 2;
@@ -563,14 +533,12 @@
         }
 
         boxContentsHotspot.addEventListener('click', () => {
-            playSFX(soundSwish, "Workspace Transition");
             mannequinOverlay.classList.add('active');
             currentDepthStage = 3;
             updateNavigationControls();
         });
 
         backToBoxesTrigger.addEventListener('click', () => {
-            playSFX(soundClick, "Back");
             if (currentDepthStage === 3) {
                 mannequinOverlay.classList.remove('active');
                 currentDepthStage = 2;
@@ -583,7 +551,6 @@
         });
 
         closeGameTrigger.addEventListener('click', () => {
-            playSFX(soundClick, "Close");
             wholeScreenGame.classList.remove('active');
             mannequinOverlay.classList.remove('active');
             resultOverlay.classList.remove('active');
