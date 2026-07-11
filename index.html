@@ -42,7 +42,7 @@
         /* ----------------------------------
            SECTION 1: LANDING & DASHBOARD
         ---------------------------------- */
-        /* Exact mathematical centering for the logo before click */
+        /* Absolute centering container for the splash screen */
         .logo-center-container {
             position: absolute;
             top: 50%;
@@ -75,9 +75,9 @@
             pointer-events: none;
         }
 
-        /* Desktop Layout row */
+        /* Desktop layout styling */
         .icon-menu-row {
-            display: flex;
+            display: none; /* Completely hidden initially to prevent mobile layout shifting */
             flex-direction: row;
             width: 96%;
             max-width: 1600px;
@@ -85,14 +85,17 @@
             gap: 4%;
             opacity: 0;
             transform: translateY(30px);
-            pointer-events: none;
-            transition: opacity 0.8s ease 0.1s, transform 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.1s;
+            transition: opacity 0.8s ease, transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
+        /* Trigger state when active */
         .icon-menu-row.visible {
+            display: flex;
+        }
+
+        .icon-menu-row.fade-in {
             opacity: 1;
             transform: translateY(0);
-            pointer-events: auto;
         }
 
         .icon-wrapper {
@@ -133,7 +136,7 @@
             transition: opacity 0.3s ease, letter-spacing 0.3s ease;
         }
 
-        /* Hover animations */
+        /* Hover states */
         .icon-wrapper:hover .icon-square {
             transform: translateY(-8px) scale(1.02);
             border-color: #260808;
@@ -199,7 +202,7 @@
         }
 
         /* ----------------------------------
-           MOBILE STACKED CONFIGURATION
+           MOBILE STACKED LAYOUT OVERRIDES
         ---------------------------------- */
         @media (max-width: 768px) {
             #brand-logo { font-size: 3.5rem; }
@@ -211,7 +214,6 @@
                 padding-bottom: 100px;
             }
 
-            /* Forces icons to stack vertically one after the other on phones */
             .icon-menu-row {
                 flex-direction: column;
                 align-items: center;
@@ -219,7 +221,6 @@
                 gap: 50px; 
             }
 
-            /* Forces icons to fill roughly half the phone viewport height */
             .icon-wrapper {
                 width: 100%;
                 max-width: 85vw;
@@ -243,7 +244,6 @@
         <!-- SECTION 1: Welcome Screen -->
         <div class="section-view" id="landing-view">
             
-            <!-- Logo container handling absolute centering -->
             <div class="logo-center-container" id="logo-wrap">
                 <h1 id="brand-logo" onclick="revealDashboard()">RALLI.</h1>
             </div>
@@ -257,7 +257,7 @@
                     <span class="icon-label">Journey</span>
                 </div>
 
-                <!-- Icon 2: Concept (Middle) -->
+                <!-- Icon 2: Concept -->
                 <div class="icon-wrapper">
                     <div class="icon-square">
                         <img src="icon3.jpg" alt="Concept">
@@ -298,13 +298,17 @@
 
             logo.classList.add('hidden');
             
-            // Clean dynamic exit for the logo container
             setTimeout(() => {
                 logoWrap.style.display = 'none';
+                
+                // Switch display block on, then trigger the CSS slide-up transition smoothly
+                menuRow.classList.add('visible');
+                setTimeout(() => {
+                    menuRow.classList.add('fade-in');
+                }, 50);
+                
+                scrollHint.classList.add('visible');
             }, 400);
-
-            menuRow.classList.add('visible');
-            scrollHint.classList.add('visible');
 
             scrollWrapper.style.overflowY = 'auto';
         }
