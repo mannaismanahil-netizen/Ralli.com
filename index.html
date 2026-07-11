@@ -223,6 +223,7 @@
             opacity: 0;
             visibility: hidden;
             transition: opacity 0.3s ease, visibility 0.3s ease;
+            background-color: #ebdcb2;
         }
 
         .fullscreen-game-overlay.active {
@@ -234,12 +235,15 @@
             position: relative;
             width: 100%;
             height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
         .collage-container img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover; 
+            width: 100vw;
+            height: 100vh;
+            object-fit: contain; 
         }
 
         /* Invisible clickable boxes layered over the design layout */
@@ -272,12 +276,12 @@
         /* Fullscreen Controls Styling */
         .close-game-btn, .back-to-boxes-btn {
             position: absolute;
-            background: rgba(38, 8, 8, 0.6);
+            background: rgba(38, 8, 8, 0.75);
             border: none;
             color: #FFFFFF;
             font-family: 'Montserrat', sans-serif;
             font-size: 0.85rem;
-            padding: 8px 16px;
+            padding: 10px 20px;
             border-radius: 30px;
             letter-spacing: 2px;
             text-transform: uppercase;
@@ -298,7 +302,7 @@
         }
 
         .close-game-btn:hover, .back-to-boxes-btn:hover {
-            background: rgba(38, 8, 8, 0.9);
+            background: rgba(38, 8, 8, 0.95);
             transform: scale(1.02);
         }
 
@@ -315,6 +319,10 @@
             opacity: 0;
             visibility: hidden;
             transition: opacity 0.3s ease, visibility 0.3s ease;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #ebdcb2;
         }
 
         .box-result-screen.active {
@@ -322,11 +330,10 @@
             visibility: visible;
         }
 
-        /* Cover setup to force full-screen edge-to-edge overlay mapping */
         .box-result-screen img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
+            width: 100vw;
+            height: 100vh;
+            object-fit: contain;
         }
 
         /* Entire window hit zone to easily click to proceed forward */
@@ -356,6 +363,10 @@
             opacity: 0;
             visibility: hidden;
             transition: opacity 0.3s ease, visibility 0.3s ease;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #ebdcb2;
         }
 
         .mannequin-workspace-screen.active {
@@ -363,11 +374,10 @@
             visibility: visible;
         }
 
-        /* Studio covers the entire background monitor viewport neatly */
         .mannequin-workspace-screen img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
+            width: 100vw;
+            height: 100vh;
+            object-fit: contain;
         }
 
         /* ----------------------------------
@@ -482,15 +492,14 @@
 
         <!-- View Level 3: Mannequin Canvas Studio -->
         <div class="mannequin-workspace-screen" id="mannequin-overlay">
-            <img src="Mannequin-view.png" alt="Mannequin Dress Studio Workspace">
+            <img src="mannequin-view.png" alt="Mannequin Dress Studio Workspace">
         </div>
     </div>
 
     <script>
-        // SETUP AUDIO INTERFACES
-        const soundClick = new Audio('click.mp3');
-        const soundReveal = new Audio('reveal.mp3');
-        const soundSwish = new Audio('swish.mp3');
+        const soundClick = new Audio('https://assets.mixkit.co/active_storage/sfx/2568/2568-84.wav');
+        const soundReveal = new Audio('https://assets.mixkit.co/active_storage/sfx/2019/2019-84.wav');
+        const soundSwish = new Audio('https://assets.mixkit.co/active_storage/sfx/2572/2572-84.wav');
 
         soundClick.preload = 'auto';
         soundReveal.preload = 'auto';
@@ -499,8 +508,8 @@
         function playSFX(audioTrack, trackName = "Audio") {
             audioTrack.currentTime = 0;
             audioTrack.play()
-                .then(() => console.log(`${trackName} executed successfully.`))
-                .catch(e => console.warn(`🔊 ${trackName} track is muted or missing standard upload.`, e.message));
+                .then(() => console.log(`${trackName} played.`))
+                .catch(e => console.warn(`🔊 Audio engine waiting for user gesture.`, e.message));
         }
 
         function revealDashboard() {
@@ -519,7 +528,6 @@
             scrollWrapper.style.overflowY = 'auto';
         }
 
-        // NAV LAYER DEEP MONITOR
         let currentDepthStage = 1; 
 
         const mainScrollContainer = document.getElementById('scroll-wrapper');
@@ -537,7 +545,6 @@
         const btnMid = document.getElementById('btn-mid');
         const btnRight = document.getElementById('btn-right');
 
-        // Stage 1 Activation Portal
         startGameTrigger.addEventListener('click', () => {
             playSFX(soundSwish, "Swish");
             wholeScreenGame.classList.add('active');
@@ -546,7 +553,6 @@
             updateNavigationControls();
         });
 
-        // Stage 2 Reveal Action
         function displayBoxPrize(imgSrc) {
             playSFX(soundReveal, "Reveal");
             resultImgFrame.src = imgSrc;
@@ -555,7 +561,6 @@
             updateNavigationControls();
         }
 
-        // Stage 3 Workspace Transition Action
         boxContentsHotspot.addEventListener('click', () => {
             playSFX(soundSwish, "Workspace Transition");
             mannequinOverlay.classList.add('active');
@@ -563,7 +568,6 @@
             updateNavigationControls();
         });
 
-        // Global Navigation Stack Systems
         backToBoxesTrigger.addEventListener('click', () => {
             playSFX(soundClick, "Back");
             if (currentDepthStage === 3) {
@@ -596,8 +600,7 @@
             }
         }
 
-        // Click listeners linked directly to your custom repository filenames
-        btnLeft.addEventListener('click', () => { displayBoxPrize('jeans-box.png.'); });
+        btnLeft.addEventListener('click', () => { displayBoxPrize('jeans-box.png'); });
         btnMid.addEventListener('click', () => { displayBoxPrize('newspaper-box.png'); });
         btnRight.addEventListener('click', () => { displayBoxPrize('combo-box.png'); });
     </script>
