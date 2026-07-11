@@ -5,61 +5,91 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RALLI</title>
     <style>
-        /* 1. YOUR ORIGINAL WEBSITE STYLING (Preserves your look) */
+        /* --- 1. YOUR ORIGINAL HOMEPAGE LAYOUT --- */
         body, html {
             margin: 0;
             padding: 0;
             width: 100%;
-            height: 100%;
-            background-color: #eaddbe; /* Matches your live tan background */
+            background-color: #eaddbe; /* Matches your site's background */
             font-family: 'Georgia', serif;
             display: flex;
             flex-direction: column;
             align-items: center;
         }
 
-        .game-header {
-            font-size: 3rem;
+        /* Your Main Label/Header Area */
+        .brand-header {
+            margin-top: 60px;
+            text-align: center;
+        }
+        
+        .brand-header h1 {
+            font-size: 4rem;
+            letter-spacing: 6px;
+            margin: 0;
+            color: #2b221a;
+        }
+
+        /* Your 3 Original Navigation Icons Row */
+        .nav-icons-container {
+            display: flex;
+            gap: 40px;
+            margin-top: 40px;
+            margin-bottom: 100px; /* Creates the space to scroll down */
+        }
+
+        .nav-icon {
+            width: 80px;
+            height: 80px;
+            background-color: rgba(0,0,0,0.05); /* Placeholder for your 3 icons */
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+        
+        .nav-icon:hover {
+            transform: scale(1.1);
+        }
+
+
+        /* --- 2. THE GAME SECTION (SCROLL DOWN TO SEE) --- */
+        .game-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 100px;
+            width: 100%;
+        }
+
+        .game-title {
+            font-size: 2.5rem;
             letter-spacing: 4px;
             color: #2b221a;
-            margin-top: 50px;
-            margin-bottom: 30px;
             text-transform: uppercase;
+            margin-bottom: 30px;
         }
 
-        /* The Game Icon button placed right on your page */
-        .icon-btn-container {
-            background: none;
-            border: none;
-            cursor: pointer;
-            outline: none;
-            padding: 0;
-            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            margin-bottom: 50px;
-        }
-
-        .icon-btn-container:hover {
-            transform: scale(1.04);
-        }
-
-        .icon-btn-container img {
+        /* The Game Box Frame Container */
+        .game-container-frame {
+            position: relative;
             width: 90vw;
-            max-width: 900px; /* Fits beautifully in your layout */
-            height: auto;
+            max-width: 900px;
+            aspect-ratio: 16 / 10;
+            background-color: #e4d7b9;
+            border: 1px solid rgba(0,0,0,0.1);
             border-radius: 4px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
         }
 
-
-        /* 2. THE FULLSCREEN GAME OVERLAY (Covers everything when active) */
-        #screen-game {
-            position: fixed; /* Forces it to stay fixed over the whole browser window */
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background-color: #f6ebd9; /* Background color behind your collage */
-            z-index: 9999; /* Forces it to sit on top of everything else on the site */
+        /* Inner screens */
+        .game-inner-screen {
+            position: absolute;
+            width: 100%;
+            height: 100%;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -72,26 +102,46 @@
             pointer-events: none;
         }
 
+        /* Game Icon Button styling */
+        .play-btn-wrapper {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            outline: none;
+            width: 100%;
+            height: 100%;
+        }
+
+        .play-btn-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .play-btn-wrapper:hover img {
+            transform: scale(1.02);
+        }
+
+        /* Pick a box collage styling inside the frame */
         .collage-wrapper {
             position: relative;
-            width: 100vw;
-            height: 100vh;
-            max-width: 177.78vh; /* Locks 16:9 aspect ratio so buttons don't misalign */
-            max-height: 56.25vw;
+            width: 100%;
+            height: 100%;
         }
 
         .collage-bg {
             width: 100%;
             height: 100%;
-            object-fit: contain; /* Keeps your entire collage perfectly visible on any monitor size */
+            object-fit: cover;
         }
 
-
-        /* 3. INTERACTIVE BOX OVERLAYS (Just like we did before!) */
+        /* The 3 Interactive Boxes Zones */
         .boxes-interactive-overlay {
             position: absolute;
-            bottom: 34%; /* Aligns vertically with the boxes in your drawing */
-            left: 21%;   /* Fits right over the row of boxes */
+            bottom: 34%;
+            left: 21%;
             width: 58%;   
             height: 30%;  
             display: flex;
@@ -101,73 +151,85 @@
         .box-target {
             width: 26%;
             height: 100%;
-            background: rgba(255, 255, 255, 0.0); /* Completely invisible hitboxes */
+            background: rgba(255, 255, 255, 0.0);
             border: none;
             cursor: pointer;
             outline: none;
-            border-radius: 16px;
+            border-radius: 12px;
             transition: background-color 0.2s ease, transform 0.2s ease;
         }
 
-        /* Makes the boxes interactive on hover */
         .box-target:hover {
-            background-color: rgba(255, 255, 255, 0.15); /* Soft light flash */
-            transform: translateY(-8px); /* Lifts up dynamically when hovered */
+            background-color: rgba(255, 255, 255, 0.15);
+            transform: translateY(-8px); /* Lifts up nicely when hovered */
         }
     </style>
 </head>
 <body>
 
-    <!-- Your standard website screen elements stay intact here -->
-    <h1 class="game-header">Play Game</h1>
+    <!-- 1. TOP OF THE PAGE: Brand Label -->
+    <div class="brand-header">
+        <h1>RALLI</h1>
+    </div>
 
-    <!-- Clickable Game Icon on your main page layout -->
-    <button class="icon-btn-container" id="play-button">
-        <img src="gameicon.jpg" alt="RALLI Game Icon">
-    </button>
+    <!-- 2. TOP OF THE PAGE: Your 3 Original Nav Icons -->
+    <div class="nav-icons-container">
+        <!-- Replace these with your actual 3 original icons/images if needed -->
+        <div class="nav-icon" title="Icon 1">⒈</div>
+        <div class="nav-icon" title="Icon 2">⒉</div>
+        <div class="nav-icon" title="Icon 3">⒊</div>
+    </div>
 
 
-    <!-- THE FULLSCREEN GAME MODE (Hidden until you click the icon above) -->
-    <div id="screen-game" class="game-screen hidden">
-        <div class="collage-wrapper">
-            <!-- Fullscreen collage background image -->
-            <img src="pickabox.jpeg" alt="Pick a box collage" class="collage-bg">
+    <!-- 3. BOTTOM OF THE PAGE: The Game Section (Visible on Scroll) -->
+    <div class="game-section">
+        <h2 class="game-title">Play Game</h2>
+
+        <div class="game-container-frame">
             
-            <!-- Interactive hovering targets over your 3 drawn boxes -->
-            <div class="boxes-interactive-overlay">
-                <button class="box-target" id="jeans-box" title="Box 1"></button>
-                <button class="box-target" id="newspaper-box" title="Box 2"></button>
-                <button class="box-target" id="combo-box" title="Box 3"></button>
+            <!-- STAGE 1: Shows just the Game Icon inside the section -->
+            <div id="view-icon" class="game-inner-screen">
+                <button class="play-btn-wrapper" id="trigger-play">
+                    <img src="gameicon.jpg" alt="RALLI Game Icon">
+                </button>
             </div>
+
+            <!-- STAGE 2: Swaps to Pick a Box inside the same section when clicked -->
+            <div id="view-game" class="game-inner-screen hidden">
+                <div class="collage-wrapper">
+                    <img src="pickabox.jpeg" alt="Pick a box" class="collage-bg">
+                    
+                    <!-- The 3 Interactive Box Targets -->
+                    <div class="boxes-interactive-overlay">
+                        <button class="box-target" id="box-jeans" title="Box 1"></button>
+                        <button class="box-target" id="box-newspaper" title="Box 2"></button>
+                        <button class="box-target" id="box-combo" title="Box 3"></button>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
 
     <script>
-        // Mechanics to trigger fullscreen overlay swap
-        const screenGame = document.getElementById('screen-game');
-        const playButton = document.getElementById('play-button');
+        const viewIcon = document.getElementById('view-icon');
+        const viewGame = document.getElementById('view-game');
+        const triggerPlay = document.getElementById('trigger-play');
 
-        const boxJeans = document.getElementById('jeans-box');
-        const boxNewspaper = document.getElementById('newspaper-box');
-        const boxCombo = document.getElementById('combo-box');
+        const btnJeans = document.getElementById('box-jeans');
+        const btnNewspaper = document.getElementById('box-newspaper');
+        const btnCombo = document.getElementById('box-combo');
 
-        // Tap Icon -> Open Fullscreen Game Mode
-        playButton.addEventListener('click', () => {
-            screenGame.classList.remove('hidden');
+        // Clicking the game icon swaps screens ONLY inside the game box container
+        triggerPlay.addEventListener('click', () => {
+            viewIcon.classList.add('hidden');
+            viewGame.classList.remove('hidden');
         });
 
-        // Box click functions (Ready for your new pictures!)
-        boxJeans.addEventListener('click', () => {
-            alert("Box 1 selected! Jeans coming up next.");
-        });
-
-        boxNewspaper.addEventListener('click', () => {
-            alert("Box 2 selected! Newspaper coming up next.");
-        });
-
-        boxCombo.addEventListener('click', () => {
-            alert("Box 3 selected! Combo coming up next.");
-        });
+        // Box interactions
+        btnJeans.addEventListener('click', () => { alert("Jeans box clicked!"); });
+        btnNewspaper.addEventListener('click', () => { alert("Newspaper box clicked!"); });
+        btnCombo.addEventListener('click', () => { alert("Combo box clicked!"); });
     </script>
 </body>
 </html>
