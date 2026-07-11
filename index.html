@@ -251,6 +251,7 @@
             height: 30%;
             display: flex;
             justify-content: space-between;
+            z-index: 10001;
         }
 
         .box-hitbox {
@@ -314,9 +315,6 @@
             opacity: 0;
             visibility: hidden;
             transition: opacity 0.3s ease, visibility 0.3s ease;
-            display: flex;
-            justify-content: center;
-            align-items: center;
         }
 
         .box-result-screen.active {
@@ -324,34 +322,25 @@
             visibility: visible;
         }
 
-        /* Changed object-fit to contain to fix desktop cropping */
+        /* Cover setup to force full-screen edge-to-edge overlay mapping */
         .box-result-screen img {
             width: 100%;
             height: 100%;
-            max-width: 100vw;
-            max-height: 100vh;
-            object-fit: contain;
-            position: relative;
+            object-fit: cover;
         }
 
-        /* Hotspot calibrated to center perfectly within core aspect container */
+        /* Entire window hit zone to easily click to proceed forward */
         .inner-item-hotspot {
             position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 40%;
-            height: 50%;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
             background: rgba(255, 255, 255, 0);
             border: none;
             outline: none;
             cursor: pointer;
-            transition: background-color 0.2s ease;
             z-index: 10003;
-        }
-        
-        .inner-item-hotspot:hover {
-            background-color: rgba(255, 255, 255, 0.08);
         }
 
         /* ----------------------------------
@@ -367,9 +356,6 @@
             opacity: 0;
             visibility: hidden;
             transition: opacity 0.3s ease, visibility 0.3s ease;
-            display: flex;
-            justify-content: center;
-            align-items: center;
         }
 
         .mannequin-workspace-screen.active {
@@ -377,12 +363,11 @@
             visibility: visible;
         }
 
+        /* Studio covers the entire background monitor viewport neatly */
         .mannequin-workspace-screen img {
             width: 100%;
             height: 100%;
-            max-width: 100vw;
-            max-height: 100vh;
-            object-fit: contain;
+            object-fit: cover;
         }
 
         /* ----------------------------------
@@ -420,11 +405,6 @@
             .game-display-box { height: 320px; max-width: 90%; }
             .close-game-btn { top: 20px; right: 20px; }
             .back-to-boxes-btn { top: 20px; left: 20px; }
-            
-            .inner-item-hotspot {
-                width: 70%;
-                height: 60%;
-            }
         }
     </style>
 </head>
@@ -435,13 +415,11 @@
         <!-- SECTION 1: Welcome Screen -->
         <div class="section-view" id="landing-view">
             
-            <!-- Logo container handling absolute centering -->
             <div class="logo-center-container" id="logo-wrap">
                 <h1 id="brand-logo" onclick="revealDashboard()">RALLI.</h1>
             </div>
 
             <div class="icon-menu-row" id="menu-row">
-                <!-- Icon 1: Journey -->
                 <div class="icon-wrapper">
                     <div class="icon-square">
                         <img src="icon1.jpeg" alt="Journey">
@@ -449,7 +427,6 @@
                     <span class="icon-label">Journey</span>
                 </div>
 
-                <!-- Icon 2: Concept (Middle) -->
                 <div class="icon-wrapper">
                     <div class="icon-square">
                         <img src="icon3.jpg" alt="Concept">
@@ -457,7 +434,6 @@
                     <span class="icon-label">Concept</span>
                 </div>
 
-                <!-- Icon 3: Your Role -->
                 <div class="icon-wrapper">
                     <div class="icon-square">
                         <img src="icon2.jpeg" alt="Your Role">
@@ -474,7 +450,6 @@
             <h2 class="game-title">Play Game</h2>
             
             <div class="game-display-box">
-                <!-- Clickable Game Icon -->
                 <button class="icon-trigger-btn" id="start-game-trigger">
                     <img src="gameicon.jpg" alt="Game Icon View">
                 </button>
@@ -492,7 +467,6 @@
         <div class="collage-container" id="selection-collage-view">
             <img src="pickabox.jpeg" alt="Pick a Box Collage">
             
-            <!-- Intercept zones over the design layout -->
             <div class="boxes-hitbox-overlay">
                 <button class="box-hitbox" id="btn-left" title="Left Box"></button>
                 <button class="box-hitbox" id="btn-mid" title="Middle Box"></button>
@@ -503,41 +477,34 @@
         <!-- View Level 2: The Box Content Reveal -->
         <div class="box-result-screen" id="result-overlay">
             <img src="" id="result-img-frame" alt="Box Prize Content">
-            <!-- Global Tap hotspot to jump into dressing the mannequin -->
             <button class="inner-item-hotspot" id="box-contents-hotspot" title="Interact with box items"></button>
         </div>
 
         <!-- View Level 3: Mannequin Canvas Studio -->
         <div class="mannequin-workspace-screen" id="mannequin-overlay">
-            <img src="mannequin-view.png" alt="Mannequin Dress Studio Workspace">
+            <img src="Mannequin-view.png" alt="Mannequin Dress Studio Workspace">
         </div>
     </div>
 
     <script>
-        // AUDIO CONTROLLER SETUP
+        // SETUP AUDIO INTERFACES
         const soundClick = new Audio('click.mp3');
         const soundReveal = new Audio('reveal.mp3');
         const soundSwish = new Audio('swish.mp3');
 
-        // Preload hint for the browser
         soundClick.preload = 'auto';
         soundReveal.preload = 'auto';
         soundSwish.preload = 'auto';
 
-        // Helper function to play sounds cleanly with status reports
-        function playSFX(audioTrack, trackName = "Audio Track") {
+        function playSFX(audioTrack, trackName = "Audio") {
             audioTrack.currentTime = 0;
             audioTrack.play()
-                .then(() => {
-                    console.log(`${trackName} played successfully.`);
-                })
-                .catch(error => {
-                    console.warn(`🔊 ${trackName} failed to play. Reason:`, error.message);
-                });
+                .then(() => console.log(`${trackName} executed successfully.`))
+                .catch(e => console.warn(`🔊 ${trackName} track is muted or missing standard upload.`, e.message));
         }
 
         function revealDashboard() {
-            playSFX(soundClick, "Click Sound");
+            playSFX(soundClick, "Click");
             const scrollWrapper = document.getElementById('scroll-wrapper');
             const logo = document.getElementById('brand-logo');
             const logoWrap = document.getElementById('logo-wrap');
@@ -545,18 +512,14 @@
             const scrollHint = document.getElementById('scroll-hint');
 
             logo.classList.add('hidden');
-            
-            setTimeout(() => {
-                logoWrap.style.display = 'none';
-            }, 400);
+            setTimeout(() => { logoWrap.style.display = 'none'; }, 400);
 
             menuRow.classList.add('visible');
             scrollHint.classList.add('visible');
-
             scrollWrapper.style.overflowY = 'auto';
         }
 
-        // NAVIGATION LOGIC TRACKING
+        // NAV LAYER DEEP MONITOR
         let currentDepthStage = 1; 
 
         const mainScrollContainer = document.getElementById('scroll-wrapper');
@@ -574,35 +537,35 @@
         const btnMid = document.getElementById('btn-mid');
         const btnRight = document.getElementById('btn-right');
 
-        // Step 1: Open Fullscreen Box Game 
+        // Stage 1 Activation Portal
         startGameTrigger.addEventListener('click', () => {
-            playSFX(soundSwish, "Swish Transition");
+            playSFX(soundSwish, "Swish");
             wholeScreenGame.classList.add('active');
             mainScrollContainer.style.overflowY = 'hidden';
             currentDepthStage = 1;
             updateNavigationControls();
         });
 
-        // Step 2: Display specific box item template
+        // Stage 2 Reveal Action
         function displayBoxPrize(imgSrc) {
-            playSFX(soundReveal, "Reveal Sound");
+            playSFX(soundReveal, "Reveal");
             resultImgFrame.src = imgSrc;
             resultOverlay.classList.add('active');
             currentDepthStage = 2;
             updateNavigationControls();
         }
 
-        // Step 3: Click inside box -> Go to Mannequin Canvas
+        // Stage 3 Workspace Transition Action
         boxContentsHotspot.addEventListener('click', () => {
-            playSFX(soundSwish, "Workspace Swish");
+            playSFX(soundSwish, "Workspace Transition");
             mannequinOverlay.classList.add('active');
             currentDepthStage = 3;
             updateNavigationControls();
         });
 
-        // Universal Back Button Navigation Handler
+        // Global Navigation Stack Systems
         backToBoxesTrigger.addEventListener('click', () => {
-            playSFX(soundClick, "Back Click");
+            playSFX(soundClick, "Back");
             if (currentDepthStage === 3) {
                 mannequinOverlay.classList.remove('active');
                 currentDepthStage = 2;
@@ -614,9 +577,8 @@
             updateNavigationControls();
         });
 
-        // Universal Close Window Action
         closeGameTrigger.addEventListener('click', () => {
-            playSFX(soundClick, "Close Click");
+            playSFX(soundClick, "Close");
             wholeScreenGame.classList.remove('active');
             mannequinOverlay.classList.remove('active');
             resultOverlay.classList.remove('active');
@@ -634,8 +596,8 @@
             }
         }
 
-        // Main Box Grid Hit Trigger Connections
-        btnLeft.addEventListener('click', () => { displayBoxPrize('jeans-box.png'); });
+        // Click listeners linked directly to your custom repository filenames
+        btnLeft.addEventListener('click', () => { displayBoxPrize('jeans-box.png.'); });
         btnMid.addEventListener('click', () => { displayBoxPrize('newspaper-box.png'); });
         btnRight.addEventListener('click', () => { displayBoxPrize('combo-box.png'); });
     </script>
