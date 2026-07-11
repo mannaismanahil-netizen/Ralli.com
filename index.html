@@ -4,315 +4,188 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RALLI</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
-    
     <style>
+        /* General website styling to match your live layout */
         body, html {
             margin: 0;
             padding: 0;
             width: 100%;
             height: 100%;
-            background-color: #F3E6BD; /* Pearl Beige */
-            font-family: 'Playfair Display', Georgia, serif;
-            -webkit-font-smoothing: antialiased;
-            color: #260808; /* Graphite */
-        }
-
-        .main-scroll-container {
-            width: 100%;
-            height: 100%;
-            overflow-y: hidden;
-            scroll-behavior: smooth;
-        }
-
-        .section-view {
-            width: 100%;
-            min-height: 100vh;
+            background-color: #eaddbe; /* Matches your site's soft gold/tan background */
+            font-family: 'Georgia', serif;
             display: flex;
             flex-direction: column;
-            justify-content: center;
             align-items: center;
-            box-sizing: border-box;
-            padding: 40px 20px;
-            position: relative;
         }
 
-        /* ----------------------------------
-           SECTION 1: LANDING & DASHBOARD
-        ---------------------------------- */
-        /* Absolute centering container for the splash screen */
-        .logo-center-container {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
+        /* "PLAY GAME" Heading Styling */
+        .game-header {
+            font-size: 3rem;
+            letter-spacing: 4px;
+            color: #2b221a;
+            margin-top: 50px;
+            margin-bottom: 30px;
+            text-transform: uppercase;
+        }
+
+        /* THE LIVE FRAME CONTAINER (Matches your exact sketch area) */
+        .interactive-showcase-frame {
+            position: relative;
+            width: 90vw;
+            max-width: 900px;
+            aspect-ratio: 16 / 10; /* Clean frame proportions */
+            background-color: #e4d7b9;
+            border: 1px solid rgba(0,0,0,0.15);
+            border-radius: 4px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
             display: flex;
             justify-content: center;
             align-items: center;
+        }
+
+        /* Screen behavior inside the frame */
+        .game-screen {
+            position: absolute;
             width: 100%;
-            text-align: center;
-            z-index: 10;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.4s ease, visibility 0.4s ease;
         }
 
-        #brand-logo {
-            font-size: 5.5rem;
-            font-weight: 500;
-            letter-spacing: 6px;
-            text-transform: uppercase;
-            margin: 0;
-            padding: 0;
-            cursor: pointer;
-            user-select: none;
-            opacity: 1;
-            transition: opacity 0.4s ease, transform 0.4s ease;
-        }
-
-        #brand-logo.hidden {
+        .hidden {
             opacity: 0;
-            transform: scale(0.95);
+            visibility: hidden;
             pointer-events: none;
         }
 
-        /* Desktop layout styling */
-        .icon-menu-row {
-            display: none; /* Completely hidden initially to prevent mobile layout shifting */
-            flex-direction: row;
-            width: 96%;
-            max-width: 1600px;
-            justify-content: center;
-            gap: 4%;
-            opacity: 0;
-            transform: translateY(30px);
-            transition: opacity 0.8s ease, transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        /* Trigger state when active */
-        .icon-menu-row.visible {
-            display: flex;
-        }
-
-        .icon-menu-row.fade-in {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .icon-wrapper {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 20px;
-            flex: 1;
-            max-width: 440px; 
-            text-decoration: none;
-            color: #260808;
+        /* --- STAGE 1: Game Icon View --- */
+        .icon-btn-container {
+            background: none;
+            border: none;
             cursor: pointer;
+            outline: none;
+            padding: 0;
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
-        .icon-square {
+        .icon-btn-container:hover {
+            transform: scale(1.04); /* Soft pop effect when hovering the game icon */
+        }
+
+        .icon-btn-container img {
             width: 100%;
-            aspect-ratio: 1 / 1;
-            border: 1px solid rgba(38, 8, 8, 0.2);
-            background-color: rgba(38, 8, 8, 0.02);
-            overflow: hidden;
-            box-shadow: 0 15px 35px rgba(38, 8, 8, 0.05);
-            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.4s ease, box-shadow 0.4s ease;
+            max-width: 500px; /* Looks beautiful inside the frame box */
+            height: auto;
+            object-fit: contain;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
         }
 
-        .icon-square img {
+        /* --- STAGE 2: Pick A Box Collage View --- */
+        .collage-wrapper {
+            position: relative;
             width: 100%;
             height: 100%;
-            object-fit: cover;
-            transition: transform 0.5s ease;
         }
 
-        .icon-label {
-            font-family: 'Montserrat', sans-serif;
-            font-size: 0.95rem;
-            font-weight: 400;
-            letter-spacing: 2px;
-            opacity: 0.7;
-            transition: opacity 0.3s ease, letter-spacing 0.3s ease;
+        .collage-bg {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Keeps your collage flush inside the frame borders */
         }
 
-        /* Hover states */
-        .icon-wrapper:hover .icon-square {
-            transform: translateY(-8px) scale(1.02);
-            border-color: #260808;
-            box-shadow: 0 25px 50px rgba(38, 8, 8, 0.1);
-        }
-        .icon-wrapper:hover .icon-square img {
-            transform: scale(1.05);
-        }
-        .icon-wrapper:hover .icon-label {
-            opacity: 1;
-            letter-spacing: 3px;
-        }
-
-        .scroll-prompt {
+        /* The row containing the three interactive button layers */
+        .boxes-interactive-overlay {
             position: absolute;
-            bottom: 35px;
-            font-family: 'Montserrat', sans-serif;
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            letter-spacing: 4px;
-            opacity: 0;
-            transform: translateY(10px);
-            transition: opacity 1s ease 0.6s, transform 1s ease 0.6s;
-        }
-        .scroll-prompt.visible {
-            opacity: 0.4;
-            transform: translateY(0);
-        }
-
-        /* ----------------------------------
-           SECTION 2: SCROLL DOWN PLAY GAME
-        ---------------------------------- */
-        #game-view {
-            background-color: #ebdcb2;
-            border-top: 1px solid rgba(38, 8, 8, 0.04);
-        }
-
-        .game-title {
-            font-size: 2.8rem;
-            font-weight: 500;
-            text-transform: uppercase;
-            letter-spacing: 4px;
-            margin-bottom: 40px;
-        }
-
-        .game-display-box {
-            width: 100%;
-            max-width: 750px;
-            height: 500px;
-            background-color: rgba(38, 8, 8, 0.02);
-            border: 1px solid rgba(38, 8, 8, 0.15);
-            box-shadow: 0 20px 45px rgba(38, 8, 8, 0.08);
+            bottom: 34%; /* Centers vertically right on top of the image's boxes */
+            left: 21%;   /* Fits precisely across the box line */
+            width: 58%;   
+            height: 30%;  
             display: flex;
-            justify-content: center;
-            align-items: center;
-            overflow: hidden;
+            justify-content: space-between;
         }
 
-        .game-display-box img {
-            width: 100%;
+        .box-target {
+            width: 26%;
             height: 100%;
-            object-fit: cover;
+            background: rgba(255, 255, 255, 0.0); /* Completely transparent */
+            border: none;
+            cursor: pointer;
+            outline: none;
+            border-radius: 16px;
+            transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
         }
 
-        /* ----------------------------------
-           MOBILE STACKED LAYOUT OVERRIDES
-        ---------------------------------- */
-        @media (max-width: 768px) {
-            #brand-logo { font-size: 3.5rem; }
-            
-            #landing-view {
-                height: auto;
-                min-height: 100vh;
-                padding-top: 60px;
-                padding-bottom: 100px;
-            }
-
-            .icon-menu-row {
-                flex-direction: column;
-                align-items: center;
-                width: 90%;
-                gap: 50px; 
-            }
-
-            .icon-wrapper {
-                width: 100%;
-                max-width: 85vw;
-            }
-
-            .icon-square {
-                width: 100%;
-                height: 45vh; 
-                aspect-ratio: auto; 
-            }
-
-            .icon-label { font-size: 0.85rem; }
-            .game-display-box { height: 320px; max-width: 90%; }
+        /* HOVER INTERACTION FOR BOXES: Gives a subtle highlight and lifts up */
+        .box-target:hover {
+            background-color: rgba(255, 255, 255, 0.15); /* Soft glowing hint */
+            transform: translateY(-8px); /* Lifts the box area upward interactively */
         }
     </style>
 </head>
 <body>
 
-    <div class="main-scroll-container" id="scroll-wrapper">
-        
-        <!-- SECTION 1: Welcome Screen -->
-        <div class="section-view" id="landing-view">
-            
-            <div class="logo-center-container" id="logo-wrap">
-                <h1 id="brand-logo" onclick="revealDashboard()">RALLI.</h1>
-            </div>
+    <!-- Your Website Heading -->
+    <h1 class="game-header">Play Game</h1>
 
-            <div class="icon-menu-row" id="menu-row">
-                <!-- Icon 1: Journey -->
-                <div class="icon-wrapper">
-                    <div class="icon-square">
-                        <img src="icon1.jpeg" alt="Journey">
-                    </div>
-                    <span class="icon-label">Journey</span>
-                </div>
+    <!-- The Interactive Showcase Frame Area -->
+    <div class="interactive-showcase-frame">
 
-                <!-- Icon 2: Concept -->
-                <div class="icon-wrapper">
-                    <div class="icon-square">
-                        <img src="icon3.jpg" alt="Concept">
-                    </div>
-                    <span class="icon-label">Concept</span>
-                </div>
-
-                <!-- Icon 3: Your Role -->
-                <div class="icon-wrapper">
-                    <div class="icon-square">
-                        <img src="icon2.jpeg" alt="Your Role">
-                    </div>
-                    <span class="icon-label">Your Role</span>
-                </div>
-            </div>
-
-            <div class="scroll-prompt" id="scroll-hint">↓ Scroll to play game</div>
+        <!-- SCREEN 1: Clickable Game Icon -->
+        <div id="screen-icon" class="game-screen">
+            <button class="icon-btn-container" id="play-button">
+                <img src="gameicon.jpg" alt="RALLI Game Icon">
+            </button>
         </div>
 
-        <!-- SECTION 2: Scroll Content Area -->
-        <div class="section-view" id="game-view">
-            <h2 class="game-title">Play Game</h2>
-            
-            <div class="game-display-box">
-                <img src="journey-sketch.jpg" alt="Ralli Interactive Showcase Frame">
+        <!-- SCREEN 2: The Pick A Box Game -->
+        <div id="screen-game" class="game-screen hidden">
+            <div class="collage-wrapper">
+                <!-- Main collage image filling the frame -->
+                <img src="pickabox.jpeg" alt="Pick a box collage" class="collage-bg">
+                
+                <!-- Interactive hovering zones mapped directly over your 3 boxes -->
+                <div class="boxes-interactive-overlay">
+                    <button class="box-target" id="jeans-box" title="Box 1"></button>
+                    <button class="box-target" id="newspaper-box" title="Box 2"></button>
+                    <button class="box-target" id="combo-box" title="Box 3"></button>
+                </div>
             </div>
         </div>
 
     </div>
 
     <script>
-        function revealDashboard() {
-            const scrollWrapper = document.getElementById('scroll-wrapper');
-            const logo = document.getElementById('brand-logo');
-            const logoWrap = document.getElementById('logo-wrap');
-            const menuRow = document.getElementById('menu-row');
-            const scrollHint = document.getElementById('scroll-hint');
+        // Screen switching mechanics
+        const screenIcon = document.getElementById('screen-icon');
+        const screenGame = document.getElementById('screen-game');
+        const playButton = document.getElementById('play-button');
 
-            logo.classList.add('hidden');
-            
-            setTimeout(() => {
-                logoWrap.style.display = 'none';
-                
-                // Switch display block on, then trigger the CSS slide-up transition smoothly
-                menuRow.classList.add('visible');
-                setTimeout(() => {
-                    menuRow.classList.add('fade-in');
-                }, 50);
-                
-                scrollHint.classList.add('visible');
-            }, 400);
+        const boxJeans = document.getElementById('jeans-box');
+        const boxNewspaper = document.getElementById('newspaper-box');
+        const boxCombo = document.getElementById('combo-box');
 
-            scrollWrapper.style.overflowY = 'auto';
-        }
+        // Tap Icon -> Reveal "Pick a box" Collage
+        playButton.addEventListener('click', () => {
+            screenIcon.classList.add('hidden');
+            screenGame.classList.remove('hidden');
+        });
+
+        // Box interactions (Awaiting your next set of graphics!)
+        boxJeans.addEventListener('click', () => {
+            alert("Box 1 selected! Jeans coming up next.");
+        });
+
+        boxNewspaper.addEventListener('click', () => {
+            alert("Box 2 selected! Newspaper coming up next.");
+        });
+
+        boxCombo.addEventListener('click', () => {
+            alert("Box 3 selected! Combo coming up next.");
+        });
     </script>
-
 </body>
 </html>
