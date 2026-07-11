@@ -223,7 +223,7 @@
             opacity: 0;
             visibility: hidden;
             transition: opacity 0.3s ease, visibility 0.3s ease;
-            background-color: #ebdcb2;
+            background-color: #6b8e78; /* Updated to perfectly match your image background green */
         }
 
         .fullscreen-game-overlay.active {
@@ -322,7 +322,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            background-color: #ebdcb2;
+            background-color: #6b8e78; /* Matches the green perfectly */
         }
 
         .box-result-screen.active {
@@ -366,7 +366,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            background-color: #ebdcb2;
+            background-color: #6b8e78; /* Matches the green perfectly */
         }
 
         .mannequin-workspace-screen.active {
@@ -497,9 +497,10 @@
     </div>
 
     <script>
-        const soundClick = new Audio('https://assets.mixkit.co/active_storage/sfx/2568/2568-84.wav');
-        const soundReveal = new Audio('https://assets.mixkit.co/active_storage/sfx/2019/2019-84.wav');
-        const soundSwish = new Audio('https://assets.mixkit.co/active_storage/sfx/2572/2572-84.wav');
+        // Open-source direct audio links
+        const soundClick = new Audio('https://actions.google.com/sounds/v1/alarms/digital_watch_alarm_long.ogg');
+        const soundReveal = new Audio('https://actions.google.com/sounds/v1/foley/crumple_paper.ogg');
+        const soundSwish = new Audio('https://actions.google.com/sounds/v1/cartoon/slide_whistle_up.ogg');
 
         soundClick.preload = 'auto';
         soundReveal.preload = 'auto';
@@ -509,7 +510,7 @@
             audioTrack.currentTime = 0;
             audioTrack.play()
                 .then(() => console.log(`${trackName} played.`))
-                .catch(e => console.warn(`🔊 Audio engine waiting for user gesture.`, e.message));
+                .catch(e => console.warn(`🔊 Audio playback paused waiting for manual user screen tap.`, e.message));
         }
 
         function revealDashboard() {
