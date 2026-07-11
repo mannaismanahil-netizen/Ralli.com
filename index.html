@@ -236,14 +236,13 @@
             height: 100%;
         }
 
-        /* This forces the image to cover every single pixel edge-to-edge */
         .collage-container img {
             width: 100%;
             height: 100%;
             object-fit: cover; 
         }
 
-        /* Invisible clickable boxes layered over the stretched background */
+        /* Invisible clickable boxes layered over the design layout */
         .boxes-hitbox-overlay {
             position: absolute;
             bottom: 34%;
@@ -269,11 +268,9 @@
             background-color: rgba(255, 255, 255, 0.12);
         }
 
-        /* Minimalist Close Trigger */
-        .close-game-btn {
+        /* Fullscreen Controls Styling */
+        .close-game-btn, .back-to-boxes-btn {
             position: absolute;
-            top: 25px;
-            right: 30px;
             background: rgba(38, 8, 8, 0.6);
             border: none;
             color: #FFFFFF;
@@ -284,14 +281,94 @@
             letter-spacing: 2px;
             text-transform: uppercase;
             cursor: pointer;
-            z-index: 10000;
+            z-index: 10010;
             backdrop-filter: blur(4px);
             transition: background-color 0.3s ease, transform 0.3s ease;
         }
 
-        .close-game-btn:hover {
+        .close-game-btn {
+            top: 25px;
+            right: 30px;
+        }
+
+        .back-to-boxes-btn {
+            top: 25px;
+            left: 30px;
+        }
+
+        .close-game-btn:hover, .back-to-boxes-btn:hover {
             background: rgba(38, 8, 8, 0.9);
             transform: scale(1.02);
+        }
+
+        /* ----------------------------------
+           BOX TEMPLATE REVEAL SCREEN 
+        ---------------------------------- */
+        .box-result-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 10002;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+
+        .box-result-screen.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .box-result-screen img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Invisible hitbox mapped right over the centered box template opening */
+        .inner-item-hotspot {
+            position: absolute;
+            top: 26%;
+            left: 14%;
+            width: 72%;
+            height: 54%;
+            background: rgba(255, 255, 255, 0);
+            border: none;
+            outline: none;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+        
+        .inner-item-hotspot:hover {
+            background-color: rgba(255, 255, 255, 0.08);
+        }
+
+        /* ----------------------------------
+           STAGE 3: MANNEQUIN STUDIO VIEW
+        ---------------------------------- */
+        .mannequin-workspace-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 10004;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+
+        .mannequin-workspace-screen.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .mannequin-workspace-screen img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
 
         /* ----------------------------------
@@ -328,6 +405,14 @@
             .icon-label { font-size: 0.85rem; }
             .game-display-box { height: 320px; max-width: 90%; }
             .close-game-btn { top: 20px; right: 20px; }
+            .back-to-boxes-btn { top: 20px; left: 20px; }
+            
+            .inner-item-hotspot {
+                top: 26%;
+                left: 14%;
+                width: 72%;
+                height: 54%;
+            }
         }
     </style>
 </head>
@@ -389,8 +474,10 @@
     <!-- STAGE 2: EDGE-TO-EDGE FULL SCREEN GRAPHIC PORTAL -->
     <div id="whole-screen-game" class="fullscreen-game-overlay">
         <button class="close-game-btn" id="close-game-trigger">✕ Close</button>
+        <button class="back-to-boxes-btn" id="back-to-boxes-trigger" style="display: none;">← Back</button>
         
-        <div class="collage-container">
+        <!-- View Level 1: The Main Selection Collage -->
+        <div class="collage-container" id="selection-collage-view">
             <img src="pickabox.jpeg" alt="Pick a Box Collage">
             
             <!-- Intercept zones over the design layout -->
@@ -400,10 +487,34 @@
                 <button class="box-hitbox" id="btn-right" title="Right Box"></button>
             </div>
         </div>
+
+        <!-- View Level 2: The Box Content Reveal -->
+        <div class="box-result-screen" id="result-overlay">
+            <img src="" id="result-img-frame" alt="Box Prize Content">
+            <!-- Global Tap hotspot to jump into dressing the mannequin -->
+            <button class="inner-item-hotspot" id="box-contents-hotspot" title="Interact with box items"></button>
+        </div>
+
+        <!-- View Level 3: Mannequin Canvas Studio -->
+        <div class="mannequin-workspace-screen" id="mannequin-overlay">
+            <img src="mannequin-view.png" alt="Mannequin Dress Studio Workspace">
+        </div>
     </div>
 
     <script>
+        // AUDIO CONTROLLER SETUP
+        const soundClick = new Audio('click.mp3');
+        const soundReveal = new Audio('reveal.mp3');
+        const soundSwish = new Audio('swish.mp3');
+
+        // Helper function to reset and play sounds instantly
+        function playSFX(audioTrack) {
+            audioTrack.currentTime = 0;
+            audioTrack.play().catch(e => console.log("Audio play blocked until user interaction."));
+        }
+
         function revealDashboard() {
+            playSFX(soundClick);
             const scrollWrapper = document.getElementById('scroll-wrapper');
             const logo = document.getElementById('brand-logo');
             const logoWrap = document.getElementById('logo-wrap');
@@ -422,32 +533,88 @@
             scrollWrapper.style.overflowY = 'auto';
         }
 
-        // FULLSCREEN CONTROLLER
+        // NAVIGATION LOGIC TRACKING
+        let currentDepthStage = 1; 
+
         const mainScrollContainer = document.getElementById('scroll-wrapper');
         const wholeScreenGame = document.getElementById('whole-screen-game');
         const startGameTrigger = document.getElementById('start-game-trigger');
         const closeGameTrigger = document.getElementById('close-game-trigger');
+        const backToBoxesTrigger = document.getElementById('back-to-boxes-trigger');
+        
+        const resultOverlay = document.getElementById('result-overlay');
+        const resultImgFrame = document.getElementById('result-img-frame');
+        const boxContentsHotspot = document.getElementById('box-contents-hotspot');
+        const mannequinOverlay = document.getElementById('mannequin-overlay');
 
         const btnLeft = document.getElementById('btn-left');
         const btnMid = document.getElementById('btn-mid');
         const btnRight = document.getElementById('btn-right');
 
-        // Go True Fullscreen
+        // Step 1: Open Fullscreen Box Game 
         startGameTrigger.addEventListener('click', () => {
+            playSFX(soundSwish);
             wholeScreenGame.classList.add('active');
             mainScrollContainer.style.overflowY = 'hidden';
+            currentDepthStage = 1;
+            updateNavigationControls();
         });
 
-        // Exit Fullscreen
+        // Step 2: Display specific box item template
+        function displayBoxPrize(imgSrc) {
+            playSFX(soundReveal);
+            resultImgFrame.src = imgSrc;
+            resultOverlay.classList.add('active');
+            currentDepthStage = 2;
+            updateNavigationControls();
+        }
+
+        // Step 3: Click inside box -> Go to Mannequin Canvas
+        boxContentsHotspot.addEventListener('click', () => {
+            playSFX(soundSwish);
+            mannequinOverlay.classList.add('active');
+            currentDepthStage = 3;
+            updateNavigationControls();
+        });
+
+        // Universal Back Button Navigation Handler
+        backToBoxesTrigger.addEventListener('click', () => {
+            playSFX(soundClick);
+            if (currentDepthStage === 3) {
+                mannequinOverlay.classList.remove('active');
+                currentDepthStage = 2;
+            } else if (currentDepthStage === 2) {
+                resultOverlay.classList.remove('active');
+                resultImgFrame.src = "";
+                currentDepthStage = 1;
+            }
+            updateNavigationControls();
+        });
+
+        // Universal Close Window Action
         closeGameTrigger.addEventListener('click', () => {
+            playSFX(soundClick);
             wholeScreenGame.classList.remove('active');
+            mannequinOverlay.classList.remove('active');
+            resultOverlay.classList.remove('active');
+            resultImgFrame.src = "";
+            currentDepthStage = 1;
             mainScrollContainer.style.overflowY = 'auto';
+            updateNavigationControls();
         });
 
-        // Box selections
-        btnLeft.addEventListener('click', () => { alert("Box 1 selected! Jeans coming soon."); });
-        btnMid.addEventListener('click', () => { alert("Box 2 selected! Newspaper coming soon."); });
-        btnRight.addEventListener('click', () => { alert("Box 3 selected! Combo coming soon."); });
+        function updateNavigationControls() {
+            if (currentDepthStage === 1) {
+                backToBoxesTrigger.style.display = 'none';
+            } else {
+                backToBoxesTrigger.style.display = 'block';
+            }
+        }
+
+        // Main Box Grid Hit Trigger Connections
+        btnLeft.addEventListener('click', () => { displayBoxPrize('jeans-box.png'); });
+        btnMid.addEventListener('click', () => { displayBoxPrize('newspaper-box.png'); });
+        btnRight.addEventListener('click', () => { displayBoxPrize('combo-box.png'); });
     </script>
 
 </body>
