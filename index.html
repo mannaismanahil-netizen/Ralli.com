@@ -39,9 +39,25 @@
             position: relative;
         }
 
-        /* ----------------------------------
-           SECTION 1: LANDING & DASHBOARD
-        ---------------------------------- */
+        /* Top Header Symbol (Where the world is made) */
+        .top-logo-header {
+            position: absolute;
+            top: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 5;
+            opacity: 0;
+            transition: opacity 0.6s ease;
+        }
+        .top-logo-header.visible {
+            opacity: 1;
+        }
+        .top-logo-header img {
+            height: 55px;
+            width: auto;
+        }
+
+        /* Original Text Entrance Heading */
         .logo-center-container {
             position: absolute;
             top: 50%;
@@ -55,17 +71,18 @@
             z-index: 10;
         }
 
-        #brand-logo {
-            max-width: 320px;
-            width: 80%;
-            height: auto;
+        #brand-logo-text {
+            font-size: 5.5rem;
+            font-weight: 400;
+            letter-spacing: 4px;
             cursor: pointer;
             user-select: none;
             opacity: 1;
+            margin: 0;
             transition: opacity 0.4s ease, transform 0.4s ease;
         }
 
-        #brand-logo.hidden {
+        #brand-logo-text.hidden {
             opacity: 0;
             transform: scale(0.95);
             pointer-events: none;
@@ -208,7 +225,7 @@
         }
 
         /* ----------------------------------
-           TRUE FULLSCREEN ABSOLUTE OVERLAY 
+           DYNAMIC FULLSCREEN GAME OVERLAY 
         ---------------------------------- */
         .fullscreen-game-overlay {
             position: fixed;
@@ -219,8 +236,8 @@
             z-index: 9999;
             opacity: 0;
             visibility: hidden;
-            transition: opacity 0.3s ease, visibility 0.3s ease;
-            background-color: #6b8e78; /* Clean design green backdrop */
+            transition: opacity 0.3s ease, visibility 0.3s ease, background-color 0.4s ease;
+            background-color: #F3E6BD; /* Matches your main beige theme initially */
         }
 
         .fullscreen-game-overlay.active {
@@ -302,7 +319,7 @@
         }
 
         /* ----------------------------------
-           BOX TEMPLATE REVEAL SCREEN 
+           BOX REVEAL LAYER
         ---------------------------------- */
         .box-result-screen {
             position: absolute;
@@ -317,7 +334,6 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            background-color: #6b8e78;
         }
 
         .box-result-screen.active {
@@ -345,7 +361,7 @@
         }
 
         /* ----------------------------------
-           STAGE 3: MANNEQUIN STUDIO VIEW
+           MANNEQUIN CANVAS LAYER
         ---------------------------------- */
         .mannequin-workspace-screen {
             position: absolute;
@@ -360,7 +376,6 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            background-color: #6b8e78;
         }
 
         .mannequin-workspace-screen.active {
@@ -378,12 +393,12 @@
            MOBILE CONFIGURATION
         ---------------------------------- */
         @media (max-width: 768px) {
-            #brand-logo { max-width: 220px; }
+            #brand-logo-text { font-size: 3.8rem; }
             
             #landing-view {
                 height: auto;
                 min-height: 100vh;
-                padding-top: 60px;
+                padding-top: 100px;
                 padding-bottom: 100px;
             }
 
@@ -417,9 +432,15 @@
     <div class="main-scroll-container" id="scroll-wrapper">
         
         <div class="section-view" id="landing-view">
+            
+            <!-- Small Symbol Header Area -->
+            <div class="top-logo-header" id="top-symbol">
+                <img src="logo.png" alt="RALLI Symbol Header">
+            </div>
+
+            <!-- Original Text Entrance Headliner -->
             <div class="logo-center-container" id="logo-wrap">
-                <!-- Click directly swaps layout screens completely silently -->
-                <img id="brand-logo" src="logo.png" alt="RALLI Symbol" onclick="revealDashboard()">
+                <h1 id="brand-logo-text" onclick="revealDashboard()">RALLI.</h1>
             </div>
 
             <div class="icon-menu-row" id="menu-row">
@@ -460,7 +481,7 @@
 
     </div>
 
-    <!-- OVERLAY PORTAL CONTAINER -->
+    <!-- OVERLAY PORTAL CONTAINER (Background tints dynamically update based on choice) -->
     <div id="whole-screen-game" class="fullscreen-game-overlay">
         <button class="close-game-btn" id="close-game-trigger">✕ Close</button>
         <button class="back-to-boxes-btn" id="back-to-boxes-trigger" style="display: none;">← Back</button>
@@ -505,13 +526,17 @@
 
         function revealDashboard() {
             const scrollWrapper = document.getElementById('scroll-wrapper');
-            const logo = document.getElementById('brand-logo');
+            const logoText = document.getElementById('brand-logo-text');
             const logoWrap = document.getElementById('logo-wrap');
             const menuRow = document.getElementById('menu-row');
             const scrollHint = document.getElementById('scroll-hint');
+            const topSymbol = document.getElementById('top-symbol');
 
-            logo.classList.add('hidden');
-            setTimeout(() => { logoWrap.style.display = 'none'; }, 400);
+            logoText.classList.add('hidden');
+            setTimeout(() => { 
+                logoWrap.style.display = 'none'; 
+                topSymbol.classList.add('visible'); // Reveals small sewing symbol up top
+            }, 400);
 
             menuRow.classList.add('visible');
             scrollHint.classList.add('visible');
@@ -519,13 +544,15 @@
         }
 
         startGameTrigger.addEventListener('click', () => {
+            wholeScreenGame.style.backgroundColor = '#F3E6BD'; // Main beige backdrop
             wholeScreenGame.classList.add('active');
             mainScrollContainer.style.overflowY = 'hidden';
             currentDepthStage = 1;
             updateNavigationControls();
         });
 
-        function displayBoxPrize(imgSrc) {
+        function displayBoxPrize(imgSrc, bgColor) {
+            wholeScreenGame.style.backgroundColor = bgColor; // Shifts backdrop frame color instantly
             resultImgFrame.src = imgSrc;
             resultOverlay.classList.add('active');
             currentDepthStage = 2;
@@ -545,6 +572,7 @@
             } else if (currentDepthStage === 2) {
                 resultOverlay.classList.remove('active');
                 resultImgFrame.src = "";
+                wholeScreenGame.style.backgroundColor = '#F3E6BD'; // Resets backdrop to selection beige
                 currentDepthStage = 1;
             }
             updateNavigationControls();
@@ -568,9 +596,10 @@
             }
         }
 
-        btnLeft.addEventListener('click', () => { displayBoxPrize('jeans-box.png'); });
-        btnMid.addEventListener('click', () => { displayBoxPrize('newspaper-box.png'); });
-        btnRight.addEventListener('click', () => { displayBoxPrize('combo-box.png'); });
+        // Click actions route custom images along with matching backdrop canvas color tints
+        btnLeft.addEventListener('click', () => { displayBoxPrize('jeans-box.png', '#2d4a6b'); });       // Indigo Blue
+        btnMid.addEventListener('click', () => { displayBoxPrize('newspaper-box.png', '#e6e6e6'); });   // Newspaper Light Gray
+        btnRight.addEventListener('click', () => { displayBoxPrize('combo-box.png', '#d9af82'); });     // Warm Accent Ochre
     </script>
 
 </body>
