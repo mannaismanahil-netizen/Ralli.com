@@ -190,12 +190,86 @@
             justify-content: center;
             align-items: center;
             overflow: hidden;
+            position: relative;
         }
 
-        .game-display-box img {
+        /* Inner canvas view container controls */
+        .canvas-screen {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.4s ease, visibility 0.4s ease;
+        }
+
+        .canvas-screen.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        /* Icon trigger setup inside the frame box */
+        .icon-trigger-btn {
+            background: none;
+            border: none;
+            width: 100%;
+            height: 100%;
+            padding: 0;
+            cursor: pointer;
+            outline: none;
+        }
+
+        .icon-trigger-btn img {
             width: 100%;
             height: 100%;
             object-fit: cover;
+            transition: transform 0.4s ease;
+        }
+
+        .icon-trigger-btn:hover img {
+            transform: scale(1.03);
+        }
+
+        /* Collage gameplay area setup */
+        .collage-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+
+        .collage-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Interactive hidden box grids */
+        .boxes-hitbox-overlay {
+            position: absolute;
+            bottom: 34%;
+            left: 21%;
+            width: 58%;
+            height: 30%;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .box-hitbox {
+            width: 26%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.0);
+            border: none;
+            outline: none;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: background-color 0.2s ease, transform 0.2s ease;
+        }
+
+        .box-hitbox:hover {
+            background-color: rgba(255, 255, 255, 0.15);
+            transform: translateY(-6px);
         }
 
         /* ----------------------------------
@@ -282,7 +356,28 @@
             <h2 class="game-title">Play Game</h2>
             
             <div class="game-display-box">
-                <img src="journey-sketch.jpg" alt="Ralli Interactive Showcase Frame">
+                
+                <!-- STAGE 1: The Clickable Game Icon -->
+                <div id="canvas-icon-view" class="canvas-screen">
+                    <button class="icon-trigger-btn" id="start-game-trigger">
+                        <img src="gameicon.jpg" alt="Game Icon View">
+                    </button>
+                </div>
+
+                <!-- STAGE 2: The Pick A Box Play Screen -->
+                <div id="canvas-game-view" class="canvas-screen hidden">
+                    <div class="collage-container">
+                        <img src="pickabox.jpeg" alt="Pick a Box Collage">
+                        
+                        <!-- Invisible active box rows positioned precisely -->
+                        <div class="boxes-hitbox-overlay">
+                            <button class="box-hitbox" id="btn-left" title="Left Box"></button>
+                            <button class="box-hitbox" id="btn-mid" title="Middle Box"></button>
+                            <button class="box-hitbox" id="btn-right" title="Right Box"></button>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
 
@@ -308,6 +403,26 @@
 
             scrollWrapper.style.overflowY = 'auto';
         }
+
+        // GAME FLOW CONTROLLER
+        const canvasIconView = document.getElementById('canvas-icon-view');
+        const canvasGameView = document.getElementById('canvas-game-view');
+        const startGameTrigger = document.getElementById('start-game-trigger');
+
+        const btnLeft = document.getElementById('btn-left');
+        const btnMid = document.getElementById('btn-mid');
+        const btnRight = document.getElementById('btn-right');
+
+        // Transitions image frames inside the box viewport container cleanly on click
+        startGameTrigger.addEventListener('click', () => {
+            canvasIconView.classList.add('hidden');
+            canvasGameView.classList.remove('hidden');
+        });
+
+        // Click listeners for your prize reveals
+        btnLeft.addEventListener('click', () => { alert("Box 1 selected! Jeans coming soon."); });
+        btnMid.addEventListener('click', () => { alert("Box 2 selected! Newspaper coming soon."); });
+        btnRight.addEventListener('click', () => { alert("Box 3 selected! Combo coming soon."); });
     </script>
 
 </body>
