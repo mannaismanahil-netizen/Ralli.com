@@ -4,232 +4,311 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RALLI</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+    
     <style>
-        /* --- 1. YOUR ORIGINAL HOMEPAGE LAYOUT --- */
         body, html {
             margin: 0;
             padding: 0;
             width: 100%;
-            background-color: #eaddbe; /* Matches your site's background */
-            font-family: 'Georgia', serif;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            height: 100%;
+            background-color: #F3E6BD; /* Pearl Beige */
+            font-family: 'Playfair Display', Georgia, serif;
+            -webkit-font-smoothing: antialiased;
+            color: #260808; /* Graphite */
         }
 
-        /* Your Main Label/Header Area */
-        .brand-header {
-            margin-top: 60px;
-            text-align: center;
-        }
-        
-        .brand-header h1 {
-            font-size: 4rem;
-            letter-spacing: 6px;
-            margin: 0;
-            color: #2b221a;
-        }
-
-        /* Your 3 Original Navigation Icons Row */
-        .nav-icons-container {
-            display: flex;
-            gap: 40px;
-            margin-top: 40px;
-            margin-bottom: 100px; /* Creates the space to scroll down */
-        }
-
-        .nav-icon {
-            width: 80px;
-            height: 80px;
-            background-color: rgba(0,0,0,0.05); /* Placeholder for your 3 icons */
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
-            transition: transform 0.2s ease;
-        }
-        
-        .nav-icon:hover {
-            transform: scale(1.1);
-        }
-
-
-        /* --- 2. THE GAME SECTION (SCROLL DOWN TO SEE) --- */
-        .game-section {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin-bottom: 100px;
-            width: 100%;
-        }
-
-        .game-title {
-            font-size: 2.5rem;
-            letter-spacing: 4px;
-            color: #2b221a;
-            text-transform: uppercase;
-            margin-bottom: 30px;
-        }
-
-        /* The Game Box Frame Container */
-        .game-container-frame {
-            position: relative;
-            width: 90vw;
-            max-width: 900px;
-            aspect-ratio: 16 / 10;
-            background-color: #e4d7b9;
-            border: 1px solid rgba(0,0,0,0.1);
-            border-radius: 4px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-            overflow: hidden;
-        }
-
-        /* Inner screens */
-        .game-inner-screen {
-            position: absolute;
+        .main-scroll-container {
             width: 100%;
             height: 100%;
+            overflow-y: hidden;
+            scroll-behavior: smooth;
+        }
+
+        .section-view {
+            width: 100%;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            box-sizing: border-box;
+            padding: 40px 20px;
+            position: relative;
+        }
+
+        /* ----------------------------------
+           SECTION 1: LANDING & DASHBOARD
+        ---------------------------------- */
+        /* Exact mathematical centering for the logo before click */
+        .logo-center-container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
             display: flex;
             justify-content: center;
             align-items: center;
-            transition: opacity 0.4s ease, visibility 0.4s ease;
+            width: 100%;
+            text-align: center;
+            z-index: 10;
         }
 
-        .hidden {
+        #brand-logo {
+            font-size: 5.5rem;
+            font-weight: 500;
+            letter-spacing: 6px;
+            text-transform: uppercase;
+            margin: 0;
+            padding: 0;
+            cursor: pointer;
+            user-select: none;
+            opacity: 1;
+            transition: opacity 0.4s ease, transform 0.4s ease;
+        }
+
+        #brand-logo.hidden {
             opacity: 0;
-            visibility: hidden;
+            transform: scale(0.95);
             pointer-events: none;
         }
 
-        /* Game Icon Button styling */
-        .play-btn-wrapper {
-            background: none;
-            border: none;
-            cursor: pointer;
-            padding: 0;
-            outline: none;
-            width: 100%;
-            height: 100%;
-        }
-
-        .play-btn-wrapper img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.3s ease;
-        }
-
-        .play-btn-wrapper:hover img {
-            transform: scale(1.02);
-        }
-
-        /* Pick a box collage styling inside the frame */
-        .collage-wrapper {
-            position: relative;
-            width: 100%;
-            height: 100%;
-        }
-
-        .collage-bg {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        /* The 3 Interactive Boxes Zones */
-        .boxes-interactive-overlay {
-            position: absolute;
-            bottom: 34%;
-            left: 21%;
-            width: 58%;   
-            height: 30%;  
+        /* Desktop Layout row */
+        .icon-menu-row {
             display: flex;
-            justify-content: space-between;
+            flex-direction: row;
+            width: 96%;
+            max-width: 1600px;
+            justify-content: center;
+            gap: 4%;
+            opacity: 0;
+            transform: translateY(30px);
+            pointer-events: none;
+            transition: opacity 0.8s ease 0.1s, transform 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.1s;
         }
 
-        .box-target {
-            width: 26%;
-            height: 100%;
-            background: rgba(255, 255, 255, 0.0);
-            border: none;
+        .icon-menu-row.visible {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+
+        .icon-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            flex: 1;
+            max-width: 440px; 
+            text-decoration: none;
+            color: #260808;
             cursor: pointer;
-            outline: none;
-            border-radius: 12px;
-            transition: background-color 0.2s ease, transform 0.2s ease;
         }
 
-        .box-target:hover {
-            background-color: rgba(255, 255, 255, 0.15);
-            transform: translateY(-8px); /* Lifts up nicely when hovered */
+        .icon-square {
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            border: 1px solid rgba(38, 8, 8, 0.2);
+            background-color: rgba(38, 8, 8, 0.02);
+            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(38, 8, 8, 0.05);
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.4s ease, box-shadow 0.4s ease;
+        }
+
+        .icon-square img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .icon-label {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 400;
+            letter-spacing: 2px;
+            opacity: 0.7;
+            transition: opacity 0.3s ease, letter-spacing 0.3s ease;
+        }
+
+        /* Hover animations */
+        .icon-wrapper:hover .icon-square {
+            transform: translateY(-8px) scale(1.02);
+            border-color: #260808;
+            box-shadow: 0 25px 50px rgba(38, 8, 8, 0.1);
+        }
+        .icon-wrapper:hover .icon-square img {
+            transform: scale(1.05);
+        }
+        .icon-wrapper:hover .icon-label {
+            opacity: 1;
+            letter-spacing: 3px;
+        }
+
+        .scroll-prompt {
+            position: absolute;
+            bottom: 35px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: opacity 1s ease 0.6s, transform 1s ease 0.6s;
+        }
+        .scroll-prompt.visible {
+            opacity: 0.4;
+            transform: translateY(0);
+        }
+
+        /* ----------------------------------
+           SECTION 2: SCROLL DOWN PLAY GAME
+        ---------------------------------- */
+        #game-view {
+            background-color: #ebdcb2;
+            border-top: 1px solid rgba(38, 8, 8, 0.04);
+        }
+
+        .game-title {
+            font-size: 2.8rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            margin-bottom: 40px;
+        }
+
+        .game-display-box {
+            width: 100%;
+            max-width: 750px;
+            height: 500px;
+            background-color: rgba(38, 8, 8, 0.02);
+            border: 1px solid rgba(38, 8, 8, 0.15);
+            box-shadow: 0 20px 45px rgba(38, 8, 8, 0.08);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .game-display-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* ----------------------------------
+           MOBILE STACKED CONFIGURATION
+        ---------------------------------- */
+        @media (max-width: 768px) {
+            #brand-logo { font-size: 3.5rem; }
+            
+            #landing-view {
+                height: auto;
+                min-height: 100vh;
+                padding-top: 60px;
+                padding-bottom: 100px;
+            }
+
+            /* Forces icons to stack vertically one after the other on phones */
+            .icon-menu-row {
+                flex-direction: column;
+                align-items: center;
+                width: 90%;
+                gap: 50px; 
+            }
+
+            /* Forces icons to fill roughly half the phone viewport height */
+            .icon-wrapper {
+                width: 100%;
+                max-width: 85vw;
+            }
+
+            .icon-square {
+                width: 100%;
+                height: 45vh; 
+                aspect-ratio: auto; 
+            }
+
+            .icon-label { font-size: 0.85rem; }
+            .game-display-box { height: 320px; max-width: 90%; }
         }
     </style>
 </head>
 <body>
 
-    <!-- 1. TOP OF THE PAGE: Brand Label -->
-    <div class="brand-header">
-        <h1>RALLI</h1>
-    </div>
-
-    <!-- 2. TOP OF THE PAGE: Your 3 Original Nav Icons -->
-    <div class="nav-icons-container">
-        <!-- Replace these with your actual 3 original icons/images if needed -->
-        <div class="nav-icon" title="Icon 1">⒈</div>
-        <div class="nav-icon" title="Icon 2">⒉</div>
-        <div class="nav-icon" title="Icon 3">⒊</div>
-    </div>
-
-
-    <!-- 3. BOTTOM OF THE PAGE: The Game Section (Visible on Scroll) -->
-    <div class="game-section">
-        <h2 class="game-title">Play Game</h2>
-
-        <div class="game-container-frame">
+    <div class="main-scroll-container" id="scroll-wrapper">
+        
+        <!-- SECTION 1: Welcome Screen -->
+        <div class="section-view" id="landing-view">
             
-            <!-- STAGE 1: Shows just the Game Icon inside the section -->
-            <div id="view-icon" class="game-inner-screen">
-                <button class="play-btn-wrapper" id="trigger-play">
-                    <img src="gameicon.jpg" alt="RALLI Game Icon">
-                </button>
+            <!-- Logo container handling absolute centering -->
+            <div class="logo-center-container" id="logo-wrap">
+                <h1 id="brand-logo" onclick="revealDashboard()">RALLI.</h1>
             </div>
 
-            <!-- STAGE 2: Swaps to Pick a Box inside the same section when clicked -->
-            <div id="view-game" class="game-inner-screen hidden">
-                <div class="collage-wrapper">
-                    <img src="pickabox.jpeg" alt="Pick a box" class="collage-bg">
-                    
-                    <!-- The 3 Interactive Box Targets -->
-                    <div class="boxes-interactive-overlay">
-                        <button class="box-target" id="box-jeans" title="Box 1"></button>
-                        <button class="box-target" id="box-newspaper" title="Box 2"></button>
-                        <button class="box-target" id="box-combo" title="Box 3"></button>
+            <div class="icon-menu-row" id="menu-row">
+                <!-- Icon 1: Journey -->
+                <div class="icon-wrapper">
+                    <div class="icon-square">
+                        <img src="icon1.jpeg" alt="Journey">
                     </div>
+                    <span class="icon-label">Journey</span>
+                </div>
+
+                <!-- Icon 2: Concept (Middle) -->
+                <div class="icon-wrapper">
+                    <div class="icon-square">
+                        <img src="icon3.jpg" alt="Concept">
+                    </div>
+                    <span class="icon-label">Concept</span>
+                </div>
+
+                <!-- Icon 3: Your Role -->
+                <div class="icon-wrapper">
+                    <div class="icon-square">
+                        <img src="icon2.jpeg" alt="Your Role">
+                    </div>
+                    <span class="icon-label">Your Role</span>
                 </div>
             </div>
 
+            <div class="scroll-prompt" id="scroll-hint">↓ Scroll to play game</div>
         </div>
+
+        <!-- SECTION 2: Scroll Content Area -->
+        <div class="section-view" id="game-view">
+            <h2 class="game-title">Play Game</h2>
+            
+            <div class="game-display-box">
+                <img src="journey-sketch.jpg" alt="Ralli Interactive Showcase Frame">
+            </div>
+        </div>
+
     </div>
 
     <script>
-        const viewIcon = document.getElementById('view-icon');
-        const viewGame = document.getElementById('view-game');
-        const triggerPlay = document.getElementById('trigger-play');
+        function revealDashboard() {
+            const scrollWrapper = document.getElementById('scroll-wrapper');
+            const logo = document.getElementById('brand-logo');
+            const logoWrap = document.getElementById('logo-wrap');
+            const menuRow = document.getElementById('menu-row');
+            const scrollHint = document.getElementById('scroll-hint');
 
-        const btnJeans = document.getElementById('box-jeans');
-        const btnNewspaper = document.getElementById('box-newspaper');
-        const btnCombo = document.getElementById('box-combo');
+            logo.classList.add('hidden');
+            
+            // Clean dynamic exit for the logo container
+            setTimeout(() => {
+                logoWrap.style.display = 'none';
+            }, 400);
 
-        // Clicking the game icon swaps screens ONLY inside the game box container
-        triggerPlay.addEventListener('click', () => {
-            viewIcon.classList.add('hidden');
-            viewGame.classList.remove('hidden');
-        });
+            menuRow.classList.add('visible');
+            scrollHint.classList.add('visible');
 
-        // Box interactions
-        btnJeans.addEventListener('click', () => { alert("Jeans box clicked!"); });
-        btnNewspaper.addEventListener('click', () => { alert("Newspaper box clicked!"); });
-        btnCombo.addEventListener('click', () => { alert("Combo box clicked!"); });
+            scrollWrapper.style.overflowY = 'auto';
+        }
     </script>
+
 </body>
 </html>
