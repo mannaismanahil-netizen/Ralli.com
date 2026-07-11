@@ -42,7 +42,6 @@
         /* ----------------------------------
            SECTION 1: LANDING & DASHBOARD
         ---------------------------------- */
-        /* Exact mathematical centering for the logo before click */
         .logo-center-container {
             position: absolute;
             top: 50%;
@@ -75,7 +74,6 @@
             pointer-events: none;
         }
 
-        /* Desktop Layout row */
         .icon-menu-row {
             display: flex;
             flex-direction: row;
@@ -133,7 +131,6 @@
             transition: opacity 0.3s ease, letter-spacing 0.3s ease;
         }
 
-        /* Hover animations */
         .icon-wrapper:hover .icon-square {
             transform: translateY(-8px) scale(1.02);
             border-color: #260808;
@@ -190,27 +187,8 @@
             justify-content: center;
             align-items: center;
             overflow: hidden;
-            position: relative;
         }
 
-        /* Inner canvas view container controls */
-        .canvas-screen {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            transition: opacity 0.4s ease, visibility 0.4s ease;
-        }
-
-        .canvas-screen.hidden {
-            opacity: 0;
-            visibility: hidden;
-            pointer-events: none;
-        }
-
-        /* Icon trigger setup inside the frame box */
         .icon-trigger-btn {
             background: none;
             border: none;
@@ -232,20 +210,48 @@
             transform: scale(1.03);
         }
 
-        /* Collage gameplay area setup */
+        /* ----------------------------------
+           FULLSCREEN OVERLAY GAME CONFIG
+        ---------------------------------- */
+        .fullscreen-game-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #000000; /* Darker backdrop to emphasize layout graphics */
+            z-index: 9999; /* Forces layer above everything else */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.4s ease, visibility 0.4s ease;
+        }
+
+        .fullscreen-game-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
         .collage-container {
             position: relative;
             width: 100%;
             height: 100%;
+            max-width: 1200px; /* Limits landscape stretch on giant monitors */
+            max-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
         .collage-container img {
             width: 100%;
             height: 100%;
-            object-fit: cover;
+            object-fit: contain; /* Keeps whole pickabox.jpeg completely visible without cropping */
         }
 
-        /* Interactive hidden box grids */
+        /* Invisible interactive hitboxes perfectly layered over the boxes */
         .boxes-hitbox-overlay {
             position: absolute;
             bottom: 34%;
@@ -263,13 +269,36 @@
             border: none;
             outline: none;
             cursor: pointer;
-            border-radius: 8px;
+            border-radius: 12px;
             transition: background-color 0.2s ease, transform 0.2s ease;
         }
 
         .box-hitbox:hover {
             background-color: rgba(255, 255, 255, 0.15);
-            transform: translateY(-6px);
+            transform: scale(1.04);
+        }
+
+        /* Close Button styling */
+        .close-game-btn {
+            position: absolute;
+            top: 30px;
+            right: 40px;
+            background: none;
+            border: none;
+            color: #FFFFFF;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.1rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            cursor: pointer;
+            opacity: 0.6;
+            z-index: 10000;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+
+        .close-game-btn:hover {
+            opacity: 1;
+            transform: scale(1.05);
         }
 
         /* ----------------------------------
@@ -285,7 +314,6 @@
                 padding-bottom: 100px;
             }
 
-            /* Forces icons to stack vertically one after the other on phones */
             .icon-menu-row {
                 flex-direction: column;
                 align-items: center;
@@ -293,7 +321,6 @@
                 gap: 50px; 
             }
 
-            /* Forces icons to fill roughly half the phone viewport height */
             .icon-wrapper {
                 width: 100%;
                 max-width: 85vw;
@@ -307,6 +334,7 @@
 
             .icon-label { font-size: 0.85rem; }
             .game-display-box { height: 320px; max-width: 90%; }
+            .close-game-btn { top: 20px; right: 20px; font-size: 0.9rem; }
         }
     </style>
 </head>
@@ -356,31 +384,29 @@
             <h2 class="game-title">Play Game</h2>
             
             <div class="game-display-box">
-                
-                <!-- STAGE 1: The Clickable Game Icon -->
-                <div id="canvas-icon-view" class="canvas-screen">
-                    <button class="icon-trigger-btn" id="start-game-trigger">
-                        <img src="gameicon.jpg" alt="Game Icon View">
-                    </button>
-                </div>
-
-                <!-- STAGE 2: The Pick A Box Play Screen -->
-                <div id="canvas-game-view" class="canvas-screen hidden">
-                    <div class="collage-container">
-                        <img src="pickabox.jpeg" alt="Pick a Box Collage">
-                        
-                        <!-- Invisible active box rows positioned precisely -->
-                        <div class="boxes-hitbox-overlay">
-                            <button class="box-hitbox" id="btn-left" title="Left Box"></button>
-                            <button class="box-hitbox" id="btn-mid" title="Middle Box"></button>
-                            <button class="box-hitbox" id="btn-right" title="Right Box"></button>
-                        </div>
-                    </div>
-                </div>
-
+                <!-- Clickable Game Icon that triggers the Fullscreen Experience -->
+                <button class="icon-trigger-btn" id="start-game-trigger">
+                    <img src="gameicon.jpg" alt="Game Icon View">
+                </button>
             </div>
         </div>
 
+    </div>
+
+    <!-- STAGE 2: WHOLE SCREEN FULLSCREEN OVERLAY PORTAL -->
+    <div id="whole-screen-game" class="fullscreen-game-overlay">
+        <button class="close-game-btn" id="close-game-trigger">✕ Close</button>
+        
+        <div class="collage-container">
+            <img src="pickabox.jpeg" alt="Pick a Box Collage">
+            
+            <!-- Target interactive box layers -->
+            <div class="boxes-hitbox-overlay">
+                <button class="box-hitbox" id="btn-left" title="Left Box"></button>
+                <button class="box-hitbox" id="btn-mid" title="Middle Box"></button>
+                <button class="box-hitbox" id="btn-right" title="Right Box"></button>
+            </div>
+        </div>
     </div>
 
     <script>
@@ -404,22 +430,29 @@
             scrollWrapper.style.overflowY = 'auto';
         }
 
-        // GAME FLOW CONTROLLER
-        const canvasIconView = document.getElementById('canvas-icon-view');
-        const canvasGameView = document.getElementById('canvas-game-view');
+        // FULLSCREEN GAME INTERACTIONS CONTROLLER
+        const mainScrollContainer = document.getElementById('scroll-wrapper');
+        const wholeScreenGame = document.getElementById('whole-screen-game');
         const startGameTrigger = document.getElementById('start-game-trigger');
+        const closeGameTrigger = document.getElementById('close-game-trigger');
 
         const btnLeft = document.getElementById('btn-left');
         const btnMid = document.getElementById('btn-mid');
         const btnRight = document.getElementById('btn-right');
 
-        // Transitions image frames inside the box viewport container cleanly on click
+        // Tap Game Icon -> Open whole screen view & lock background site scrolling
         startGameTrigger.addEventListener('click', () => {
-            canvasIconView.classList.add('hidden');
-            canvasGameView.classList.remove('hidden');
+            wholeScreenGame.classList.add('active');
+            mainScrollContainer.style.overflowY = 'hidden';
         });
 
-        // Click listeners for your prize reveals
+        // Tap Close -> Return back to standard webpage layout view
+        closeGameTrigger.addEventListener('click', () => {
+            wholeScreenGame.classList.remove('active');
+            mainScrollContainer.style.overflowY = 'auto';
+        });
+
+        // Interactive Choice alerts
         btnLeft.addEventListener('click', () => { alert("Box 1 selected! Jeans coming soon."); });
         btnMid.addEventListener('click', () => { alert("Box 2 selected! Newspaper coming soon."); });
         btnRight.addEventListener('click', () => { alert("Box 3 selected! Combo coming soon."); });
