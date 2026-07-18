@@ -5,56 +5,38 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RALLI</title>
     <style>
-        /* General Page Settings */
+        /* 1. KEEPING YOUR ORIGINAL BACKGROUND & LAYOUT */
         body {
-            background-color: #ede6c9; /* Beige canvas */
+            background-color: #ede6c9;
             margin: 0;
             padding: 0;
             color: #333;
             text-align: center;
-            cursor: pointer;
         }
 
-        /* Hero Text Area (Initial Screen View) */
+        /* 2. INITIAL TEXT VIEW (Takes full screen) */
         .hero-section {
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
             width: 100%;
-            transition: height 0.6s ease-in-out;
+            cursor: pointer;
         }
 
-        /* Big RALLI Text Styling */
-        .brand-title {
-            font-size: 48px;
-            letter-spacing: 12px;
-            text-transform: uppercase;
-            font-weight: normal;
-            margin: 0;
-            user-select: none;
-        }
-
-        /* Fixed Row Grid for the 3 Cards (Initially hidden) */
+        /* 3. MAIN CARDS GRID (Hidden on load) */
         .main-container {
-            display: flex;
-            flex-direction: row;
+            display: none; /* Hidden until clicked */
             justify-content: center;
             align-items: flex-start;
             gap: 40px;
+            padding: 80px 20px;
             max-width: 1200px;
             margin: 0 auto;
-            padding: 0 20px 80px 20px;
-            box-sizing: border-box;
-            opacity: 0;
-            visibility: hidden;
-            transform: translateY(20px);
-            transition: opacity 0.8s ease, transform 0.8s ease, visibility 0.8s;
         }
 
         .card {
             flex: 1;
-            min-width: 0;
             max-width: 350px;
         }
 
@@ -64,98 +46,72 @@
             aspect-ratio: 1 / 1;
             object-fit: cover;
             border: 1px solid #333;
-            display: block;
         }
 
-        .card h3 {
-            margin-top: 15px;
-            font-size: 16px;
-            font-weight: normal;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-        }
-
-        /* Scroll Text Indicator & Game Section (Revealed on Scroll) */
+        /* 4. SCROLL INDICATOR & HALF-SCREEN GAME BUTTON */
         .scroll-hint {
+            display: none; /* Hidden until clicked */
             font-size: 12px;
             letter-spacing: 4px;
             text-transform: uppercase;
-            margin: 60px 0 40px 0;
+            margin: 40px 0;
             color: #666;
-            opacity: 0;
-            transition: opacity 0.6s ease;
         }
 
         .game-section {
-            padding-bottom: 100px;
-            display: flex;
+            display: none; /* Hidden until clicked */
+            height: 50vh; /* Takes up exactly half the screen */
             justify-content: center;
             align-items: center;
-            opacity: 0;
-            transition: opacity 0.6s ease;
-        }
-
-        .game-play-btn {
-            display: inline-block;
-            transition: transform 0.2s ease;
-        }
-
-        .game-play-btn:hover {
-            transform: scale(1.05);
+            padding-bottom: 50px;
         }
 
         .game-play-btn img {
-            width: 150px;
-            height: auto;
+            height: 80%; /* Scales the icon to fit comfortably inside the half-screen block */
+            width: auto;
             cursor: pointer;
+            object-fit: contain;
         }
 
-        /* Active State Classes triggered by JavaScript */
+        /* 5. INTERACTIVE STATES CONTROLLED BY JS */
+        /* When clicked: hide text header, show the 3 icons & scroll hint */
         body.revealed .hero-section {
-            height: 40vh;
+            display: none;
         }
 
-        body.revealed .main-container {
-            opacity: 1;
-            visibility: visible;
-            transform: translateY(0);
-        }
-
-        body.scrolled .scroll-hint,
-        body.scrolled .game-section {
-            opacity: 1;
+        body.revealed .main-container,
+        body.revealed .scroll-hint,
+        body.revealed .game-section {
+            display: flex;
         }
     </style>
 </head>
 <body>
 
-    <!-- Step 1: Initial Entry View -->
+    <!-- Step 1: Just the brand text on load -->
     <header class="hero-section" id="hero">
-        <h1 class="brand-title">RALLI</h1>
+        <h1 style="font-size: 48px; letter-spacing: 12px; font-weight: normal; margin: 0;">RALLI</h1>
     </header>
 
-    <!-- Step 2: Main Cards (Revealed after clicking anywhere) -->
-    <main class="main-container" id="content-grid">
-        <!-- Journey -->
+    <!-- Step 2: Clicking removes text, shows these 3 icons -->
+    <main class="main-container">
         <div class="card">
             <img src="icon1.jpeg" alt="Journey">
-            <h3>Journey</h3>
+            <h3 style="margin-top: 15px; font-size: 16px; font-weight: normal; letter-spacing: 2px; text-transform: uppercase;">Journey</h3>
         </div>
 
-        <!-- Concept -->
         <div class="card">
             <img src="icon2.jpeg" alt="Concept">
-            <h3>Concept</h3>
+            <h3 style="margin-top: 15px; font-size: 16px; font-weight: normal; letter-spacing: 2px; text-transform: uppercase;">Concept</h3>
         </div>
 
-        <!-- Your Role -->
         <div class="card">
             <img src="icon3.jpg" alt="Your Role">
-            <h3>Your Role</h3>
+            <h3 style="margin-top: 15px; font-size: 16px; font-weight: normal; letter-spacing: 2px; text-transform: uppercase;">Your Role</h3>
         </div>
     </main>
 
-    <!-- Step 3: Game Section elements (Revealed only on scroll) -->
+    <!-- Step 3: Scroll down to reveal the half-screen play icon -->
     <div class="scroll-hint">
         ↓ Scroll to play game
     </div>
@@ -166,21 +122,10 @@
         </a>
     </section>
 
-    <!-- Behavior Controller Scripts -->
+    <!-- Simple click tracker -->
     <script>
-        let isRevealed = false;
-
-        document.body.addEventListener('click', function() {
-            if (!isRevealed) {
-                document.body.classList.add('revealed');
-                isRevealed = true;
-            }
-        });
-
-        window.addEventListener('scroll', function() {
-            if (isRevealed && window.scrollY > 50) {
-                document.body.classList.add('scrolled');
-            }
+        document.getElementById('hero').addEventListener('click', function() {
+            document.body.classList.add('revealed');
         });
     </script>
 
