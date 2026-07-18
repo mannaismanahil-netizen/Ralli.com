@@ -5,187 +5,115 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RALLI</title>
     <style>
-        /* General website styling to match your live layout */
-        body, html {
+        /* General Page Settings */
+        body {
+            background-color: #ede6c9; /* Beige canvas */
+            font-family: 'Courier New', Courier, monospace; 
             margin: 0;
             padding: 0;
-            width: 100%;
-            height: 100%;
-            background-color: #eaddbe; /* Matches your site's soft gold/tan background */
-            font-family: 'Georgia', serif;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            color: #333;
+            text-align: center;
         }
 
-        /* "PLAY GAME" Heading Styling */
-        .game-header {
-            font-size: 3rem;
-            letter-spacing: 4px;
-            color: #2b221a;
-            margin-top: 50px;
-            margin-bottom: 30px;
+        /* The 3 Main Cards Grid (Journey, Concept, Your Role) */
+        .main-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 40px;
+            padding: 80px 20px 40px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .card {
+            flex: 1;
+            max-width: 350px;
+        }
+
+        .card img {
+            width: 100%;
+            height: auto;
+            aspect-ratio: 1 / 1;
+            object-fit: cover;
+            border: 1px solid #333;
+        }
+
+        .card h3 {
+            margin-top: 15px;
+            font-size: 16px;
+            font-weight: normal;
+            letter-spacing: 2px;
             text-transform: uppercase;
         }
 
-        /* THE LIVE FRAME CONTAINER (Matches your exact sketch area) */
-        .interactive-showcase-frame {
-            position: relative;
-            width: 90vw;
-            max-width: 900px;
-            aspect-ratio: 16 / 10; /* Clean frame proportions */
-            background-color: #e4d7b9;
-            border: 1px solid rgba(0,0,0,0.15);
-            border-radius: 4px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-            overflow: hidden;
+        /* Scroll Text Indicator */
+        .scroll-hint {
+            font-size: 12px;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            margin: 40px 0;
+            color: #666;
+        }
+
+        /* Centered Game Section */
+        .game-section {
+            padding-bottom: 80px;
             display: flex;
             justify-content: center;
             align-items: center;
         }
 
-        /* Screen behavior inside the frame */
-        .game-screen {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            transition: opacity 0.4s ease, visibility 0.4s ease;
+        .game-play-btn {
+            display: inline-block;
+            transition: transform 0.2s ease;
         }
 
-        .hidden {
-            opacity: 0;
-            visibility: hidden;
-            pointer-events: none;
+        .game-play-btn:hover {
+            transform: scale(1.05);
         }
 
-        /* --- STAGE 1: Game Icon View --- */
-        .icon-btn-container {
-            background: none;
-            border: none;
-            cursor: pointer;
-            outline: none;
-            padding: 0;
-            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-
-        .icon-btn-container:hover {
-            transform: scale(1.04); /* Soft pop effect when hovering the game icon */
-        }
-
-        .icon-btn-container img {
-            width: 100%;
-            max-width: 500px; /* Looks beautiful inside the frame box */
+        .game-play-btn img {
+            width: 150px; /* Adjust size of your game icon here */
             height: auto;
-            object-fit: contain;
-            border-radius: 12px;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-        }
-
-        /* --- STAGE 2: Pick A Box Collage View --- */
-        .collage-wrapper {
-            position: relative;
-            width: 100%;
-            height: 100%;
-        }
-
-        .collage-bg {
-            width: 100%;
-            height: 100%;
-            object-fit: cover; /* Keeps your collage flush inside the frame borders */
-        }
-
-        /* The row containing the three interactive button layers */
-        .boxes-interactive-overlay {
-            position: absolute;
-            bottom: 34%; /* Centers vertically right on top of the image's boxes */
-            left: 21%;   /* Fits precisely across the box line */
-            width: 58%;   
-            height: 30%;  
-            display: flex;
-            justify-content: space-between;
-        }
-
-        .box-target {
-            width: 26%;
-            height: 100%;
-            background: rgba(255, 255, 255, 0.0); /* Completely transparent */
-            border: none;
             cursor: pointer;
-            outline: none;
-            border-radius: 16px;
-            transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
-        }
-
-        /* HOVER INTERACTION FOR BOXES: Gives a subtle highlight and lifts up */
-        .box-target:hover {
-            background-color: rgba(255, 255, 255, 0.15); /* Soft glowing hint */
-            transform: translateY(-8px); /* Lifts the box area upward interactively */
         }
     </style>
 </head>
 <body>
 
-    <!-- Your Website Heading -->
-    <h1 class="game-header">Play Game</h1>
-
-    <!-- The Interactive Showcase Frame Area -->
-    <div class="interactive-showcase-frame">
-
-        <!-- SCREEN 1: Clickable Game Icon -->
-        <div id="screen-icon" class="game-screen">
-            <button class="icon-btn-container" id="play-button">
-                <img src="gameicon.jpg" alt="RALLI Game Icon">
-            </button>
+    <!-- Main Content Grid -->
+    <main class="main-container">
+        <!-- Journey -->
+        <div class="card">
+            <img src="icon1.jpeg" alt="Journey">
+            <h3>Journey</h3>
         </div>
 
-        <!-- SCREEN 2: The Pick A Box Game -->
-        <div id="screen-game" class="game-screen hidden">
-            <div class="collage-wrapper">
-                <!-- Main collage image filling the frame -->
-                <img src="pickabox.jpeg" alt="Pick a box collage" class="collage-bg">
-                
-                <!-- Interactive hovering zones mapped directly over your 3 boxes -->
-                <div class="boxes-interactive-overlay">
-                    <button class="box-target" id="jeans-box" title="Box 1"></button>
-                    <button class="box-target" id="newspaper-box" title="Box 2"></button>
-                    <button class="box-target" id="combo-box" title="Box 3"></button>
-                </div>
-            </div>
+        <!-- Concept -->
+        <div class="card">
+            <img src="icon2.jpeg" alt="Concept">
+            <h3>Concept</h3>
         </div>
 
+        <!-- Your Role -->
+        <div class="card">
+            <img src="icon3.jpeg" alt="Your Role">
+            <h3>Your Role</h3>
+        </div>
+    </main>
+
+    <!-- Scroll Text -->
+    <div class="scroll-hint">
+        ↓ Scroll to play game
     </div>
 
-    <script>
-        // Screen switching mechanics
-        const screenIcon = document.getElementById('screen-icon');
-        const screenGame = document.getElementById('screen-game');
-        const playButton = document.getElementById('play-button');
+    <!-- Game Section: Cleaned up to ONLY show the play icon -->
+    <section class="game-section">
+        <a href="#" class="game-play-btn">
+            <img src="gameicon.jpg" alt="Play Game">
+        </a>
+    </section>
 
-        const boxJeans = document.getElementById('jeans-box');
-        const boxNewspaper = document.getElementById('newspaper-box');
-        const boxCombo = document.getElementById('combo-box');
-
-        // Tap Icon -> Reveal "Pick a box" Collage
-        playButton.addEventListener('click', () => {
-            screenIcon.classList.add('hidden');
-            screenGame.classList.remove('hidden');
-        });
-
-        // Box interactions (Awaiting your next set of graphics!)
-        boxJeans.addEventListener('click', () => {
-            alert("Box 1 selected! Jeans coming up next.");
-        });
-
-        boxNewspaper.addEventListener('click', () => {
-            alert("Box 2 selected! Newspaper coming up next.");
-        });
-
-        boxCombo.addEventListener('click', () => {
-            alert("Box 3 selected! Combo coming up next.");
-        });
-    </script>
 </body>
 </html>
