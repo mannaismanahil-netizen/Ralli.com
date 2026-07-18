@@ -13,21 +13,49 @@
             padding: 0;
             color: #333;
             text-align: center;
+            cursor: pointer; /* Intuitively signals the page is clickable */
         }
 
-        /* The 3 Main Cards Grid (Journey, Concept, Your Role) */
-        .main-container {
+        /* Hero Text Area (Initial Screen View) */
+        .hero-section {
             display: flex;
             justify-content: center;
             align-items: center;
+            height: 100vh;
+            width: 100%;
+            transition: height 0.6s ease-in-out;
+        }
+
+        /* Big RALLI Text Styling */
+        .brand-title {
+            font-size: 48px;
+            letter-spacing: 12px;
+            text-transform: uppercase;
+            font-weight: normal;
+            margin: 0;
+            user-select: none;
+        }
+
+        /* Fixed Row Grid for the 3 Cards (Initially hidden) */
+        .main-container {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: flex-start;
             gap: 40px;
-            padding: 80px 20px 40px 20px;
             max-width: 1200px;
             margin: 0 auto;
+            padding: 0 20px 80px 20px;
+            box-sizing: border-box;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(20px);
+            transition: opacity 0.8s ease, transform 0.8s ease, visibility 0.8s;
         }
 
         .card {
             flex: 1;
+            min-width: 0;
             max-width: 350px;
         }
 
@@ -37,6 +65,7 @@
             aspect-ratio: 1 / 1;
             object-fit: cover;
             border: 1px solid #333;
+            display: block;
         }
 
         .card h3 {
@@ -47,21 +76,24 @@
             text-transform: uppercase;
         }
 
-        /* Scroll Text Indicator */
+        /* Scroll Text Indicator & Game Section (Revealed on Scroll) */
         .scroll-hint {
             font-size: 12px;
             letter-spacing: 4px;
             text-transform: uppercase;
-            margin: 40px 0;
+            margin: 60px 0 40px 0;
             color: #666;
+            opacity: 0;
+            transition: opacity 0.6s ease;
         }
 
-        /* Centered Game Section */
         .game-section {
-            padding-bottom: 80px;
+            padding-bottom: 100px;
             display: flex;
             justify-content: center;
             align-items: center;
+            opacity: 0;
+            transition: opacity 0.6s ease;
         }
 
         .game-play-btn {
@@ -74,16 +106,38 @@
         }
 
         .game-play-btn img {
-            width: 150px; /* Adjust size of your game icon here */
+            width: 150px;
             height: auto;
             cursor: pointer;
+        }
+
+        /* Active State Classes triggered by JavaScript */
+        body.revealed .hero-section {
+            height: 40vh; /* Shrinks header down elegantly to make room for content */
+        }
+
+        body.revealed .main-container {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        /* Class applied when scrolling happens */
+        body.scrolled .scroll-hint,
+        body.scrolled .game-section {
+            opacity: 1;
         }
     </style>
 </head>
 <body>
 
-    <!-- Main Content Grid -->
-    <main class="main-container">
+    <!-- Step 1: Initial Entry View -->
+    <header class="hero-section" id="hero">
+        <h1 class="brand-title">RALLI</h1>
+    </header>
+
+    <!-- Step 2: Main Cards (Revealed after clicking anywhere) -->
+    <main class="main-container" id="content-grid">
         <!-- Journey -->
         <div class="card">
             <img src="icon1.jpeg" alt="Journey">
@@ -98,22 +152,43 @@
 
         <!-- Your Role -->
         <div class="card">
-            <img src="icon3.jpeg" alt="Your Role">
+            <img src="icon3.jpg" alt="Your Role">
             <h3>Your Role</h3>
         </div>
     </main>
 
-    <!-- Scroll Text -->
+    <!-- Step 3: Game Section elements (Revealed only on scroll) -->
     <div class="scroll-hint">
         ↓ Scroll to play game
     </div>
 
-    <!-- Game Section: Cleaned up to ONLY show the play icon -->
     <section class="game-section">
         <a href="#" class="game-play-btn">
             <img src="gameicon.jpg" alt="Play Game">
         </a>
     </section>
+
+    <!-- Behavior Controller Scripts -->
+    <script>
+        // Track the interactions
+        let isRevealed = false;
+
+        // 1. Listen for clicks anywhere on the page to reveal the 3 main cards
+        document.body.addEventListener('click', function() {
+            if (!isRevealed) {
+                document.body.classList.add('revealed');
+                isRevealed = true;
+            }
+        });
+
+        // 2. Listen for scroll events to reveal the game section at the bottom
+        window.addEventListener('scroll', function() {
+            // Only trigger scroll fade-in if they've already clicked to open the page
+            if (isRevealed && window.scrollY > 50) {
+                document.body.classList.add('scrolled');
+            }
+        });
+    </script>
 
 </body>
 </html>
