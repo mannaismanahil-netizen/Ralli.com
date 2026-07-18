@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RALLI</title>
     <style>
-        /* 1. KEEPING YOUR ORIGINAL BACKGROUND & LAYOUT */
+        /* Base Canvas Settings */
         body {
             background-color: #ede6c9;
             margin: 0;
@@ -14,7 +14,7 @@
             text-align: center;
         }
 
-        /* 2. INITIAL TEXT VIEW (Takes full screen) */
+        /* Initial Full-Screen Entry Text View */
         .hero-section {
             display: flex;
             justify-content: center;
@@ -24,15 +24,16 @@
             cursor: pointer;
         }
 
-        /* 3. MAIN CARDS GRID (Hidden on load) */
+        /* Content Layout: 3 Cards Block (Journey, Concept, Your Role) */
         .main-container {
-            display: none; /* Hidden until clicked */
+            display: none; /* Hidden until you click the text */
             justify-content: center;
             align-items: flex-start;
             gap: 40px;
-            padding: 80px 20px;
+            padding: 80px 20px 40px 20px;
             max-width: 1200px;
             margin: 0 auto;
+            box-sizing: border-box;
         }
 
         .card {
@@ -48,9 +49,9 @@
             border: 1px solid #333;
         }
 
-        /* 4. SCROLL INDICATOR & HALF-SCREEN GAME BUTTON */
+        /* Scroll Indicator */
         .scroll-hint {
-            display: none; /* Hidden until clicked */
+            display: none; /* Hidden until click */
             font-size: 12px;
             letter-spacing: 4px;
             text-transform: uppercase;
@@ -58,23 +59,25 @@
             color: #666;
         }
 
+        /* Half-Screen Game Section Focus */
         .game-section {
-            display: none; /* Hidden until clicked */
+            display: none; /* Hidden until click */
             height: 50vh; /* Takes up exactly half the screen */
             justify-content: center;
             align-items: center;
             padding-bottom: 50px;
+            box-sizing: border-box;
         }
 
         .game-play-btn img {
-            height: 80%; /* Scales the icon to fit comfortably inside the half-screen block */
+            height: 80%; /* Fits the gameicon comfortably within the half-screen block */
             width: auto;
             cursor: pointer;
             object-fit: contain;
         }
 
-        /* 5. INTERACTIVE STATES CONTROLLED BY JS */
-        /* When clicked: hide text header, show the 3 icons & scroll hint */
+        /* --- STATE LOGIC TRIGGERED BY CLICK --- */
+        /* When clicked: hide text header, activate flex displays for layout items */
         body.revealed .hero-section {
             display: none;
         }
@@ -88,30 +91,33 @@
 </head>
 <body>
 
-    <!-- Step 1: Just the brand text on load -->
+    <!-- Step 1: Initial RALLI Title View -->
     <header class="hero-section" id="hero">
         <h1 style="font-size: 48px; letter-spacing: 12px; font-weight: normal; margin: 0;">RALLI</h1>
     </header>
 
-    <!-- Step 2: Clicking removes text, shows these 3 icons -->
+    <!-- Step 2: Core Section Columns (Shown after text click) -->
     <main class="main-container">
+        <!-- Journey Card -->
         <div class="card">
             <img src="icon1.jpeg" alt="Journey">
             <h3 style="margin-top: 15px; font-size: 16px; font-weight: normal; letter-spacing: 2px; text-transform: uppercase;">Journey</h3>
         </div>
 
+        <!-- Concept Card -->
         <div class="card">
             <img src="icon2.jpeg" alt="Concept">
             <h3 style="margin-top: 15px; font-size: 16px; font-weight: normal; letter-spacing: 2px; text-transform: uppercase;">Concept</h3>
         </div>
 
+        <!-- Your Role Card -->
         <div class="card">
             <img src="icon3.jpg" alt="Your Role">
             <h3 style="margin-top: 15px; font-size: 16px; font-weight: normal; letter-spacing: 2px; text-transform: uppercase;">Your Role</h3>
         </div>
     </main>
 
-    <!-- Step 3: Scroll down to reveal the half-screen play icon -->
+    <!-- Step 3: Scroll Indicator and Half-Screen Game View -->
     <div class="scroll-hint">
         ↓ Scroll to play game
     </div>
@@ -122,7 +128,7 @@
         </a>
     </section>
 
-    <!-- Simple click tracker -->
+    <!-- Click handler to transition layout states -->
     <script>
         document.getElementById('hero').addEventListener('click', function() {
             document.body.classList.add('revealed');
