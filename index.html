@@ -4,257 +4,233 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RALLI</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
-    
     <style>
-        body, html {
+        /* Base Canvas Settings */
+        * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            width: 100%;
-            height: 100%;
-            background-color: #F3E6BD; /* Pearl Beige */
-            font-family: 'Playfair Display', Georgia, serif;
-            -webkit-font-smoothing: antialiased;
-            color: #260808; /* Graphite */
         }
 
-        .main-scroll-container {
-            width: 100%;
-            height: 100%;
-            overflow-y: hidden;
-            scroll-behavior: smooth;
+        body {
+            background-color: #ede6c9;
+            color: #333;
+            font-family: 'Times New Roman', Times, serif;
+            text-align: center;
+            overflow-x: hidden;
         }
 
-        .section-view {
-            width: 100%;
+        /* Hero Section - Centered RALLI Logo */
+        .hero-section {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
             height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            box-sizing: border-box;
-            padding: 20px;
-            position: relative;
+            width: 100%;
         }
 
-        /* ----------------------------------
-           SECTION 1: LANDING & DASHBOARD
-        ---------------------------------- */
-        #brand-logo {
-            font-size: 5.5rem;
-            font-weight: 500;
-            letter-spacing: 6px;
+        .logo-container img {
+            max-width: 250px;
+            height: auto;
+        }
+
+        .hero-title {
+            font-size: 5rem;
+            letter-spacing: 0.15em;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        .scroll-indicator {
+            margin-top: 30px;
+            font-size: 0.9rem;
             text-transform: uppercase;
-            margin: 0;
-            cursor: pointer;
-            user-select: none;
-            opacity: 1;
-            transition: opacity 0.4s ease, transform 0.4s ease;
-        }
-
-        #brand-logo.hidden {
-            opacity: 0;
-            transform: scale(0.95);
-            pointer-events: none;
-            position: absolute;
-        }
-
-        /* Expanded container to take up maximum screen width */
-        .icon-menu-row {
-            display: flex;
-            width: 96%;
-            max-width: 1600px;
-            justify-content: center;
-            gap: 4%;
-            opacity: 0;
-            transform: translateY(30px);
-            pointer-events: none;
-            transition: opacity 0.8s ease 0.1s, transform 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.1s;
-        }
-
-        .icon-menu-row.visible {
-            opacity: 1;
-            transform: translateY(0);
-            pointer-events: auto;
-        }
-
-        .icon-wrapper {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 20px;
-            flex: 1;
-            max-width: 440px; /* Increased max width to make them significantly larger */
-            text-decoration: none;
-            color: #260808;
-            cursor: pointer;
-        }
-
-        /* Perfect sharp squares scaling up dynamically */
-        .icon-square {
-            width: 100%;
-            aspect-ratio: 1 / 1;
-            border: 1px solid rgba(38, 8, 8, 0.2);
-            background-color: rgba(38, 8, 8, 0.02);
-            overflow: hidden;
-            box-shadow: 0 15px 35px rgba(38, 8, 8, 0.05);
-            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.4s ease, box-shadow 0.4s ease;
-        }
-
-        .icon-square img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.5s ease;
-        }
-
-        .icon-label {
-            font-family: 'Montserrat', sans-serif;
-            font-size: 0.95rem;
-            font-weight: 400;
             letter-spacing: 2px;
-            opacity: 0.7;
-            transition: opacity 0.3s ease, letter-spacing 0.3s ease;
+            color: #666;
+            animation: bounce 2s infinite;
         }
 
-        /* Interactive movements */
-        .icon-wrapper:hover .icon-square {
-            transform: translateY(-8px) scale(1.02);
-            border-color: #260808;
-            box-shadow: 0 25px 50px rgba(38, 8, 8, 0.1);
-        }
-        .icon-wrapper:hover .icon-square img {
-            transform: scale(1.05);
-        }
-        .icon-wrapper:hover .icon-label {
-            opacity: 1;
-            letter-spacing: 3px;
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
         }
 
-        .scroll-prompt {
-            position: absolute;
-            bottom: 35px;
-            font-family: 'Montserrat', sans-serif;
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            letter-spacing: 4px;
-            opacity: 0;
-            transform: translateY(10px);
-            transition: opacity 1s ease 0.6s, transform 1s ease 0.6s;
-        }
-        .scroll-prompt.visible {
-            opacity: 0.4;
-            transform: translateY(0);
-        }
-
-        /* ----------------------------------
-           SECTION 2: SCROLL DOWN PLAY GAME
-        ---------------------------------- */
-        #game-view {
-            background-color: #ebdcb2;
-            border-top: 1px solid rgba(38, 8, 8, 0.04);
+        /* Game Section */
+        .game-section {
+            min-height: 100vh;
+            padding: 60px 20px;
+            background-color: #e3dac1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border-top: 1px solid #d4c8a8;
         }
 
         .game-title {
-            font-size: 2.8rem;
-            font-weight: 500;
+            font-size: 2.2rem;
+            margin-bottom: 10px;
             text-transform: uppercase;
-            letter-spacing: 4px;
-            margin-bottom: 40px;
+            letter-spacing: 2px;
         }
 
-        .game-display-box {
-            width: 100%;
-            max-width: 750px;
-            height: 500px;
-            background-color: rgba(38, 8, 8, 0.02);
-            border: 1px solid rgba(38, 8, 8, 0.15);
-            box-shadow: 0 20px 45px rgba(38, 8, 8, 0.08);
+        .game-subtitle {
+            font-size: 1.1rem;
+            color: #555;
+            margin-bottom: 40px;
+            font-style: italic;
+        }
+
+        .game-container {
             display: flex;
+            flex-wrap: wrap;
+            gap: 40px;
             justify-content: center;
             align-items: center;
-            overflow: hidden;
-        }
-
-        .game-display-box img {
+            max-width: 900px;
             width: 100%;
-            height: 100%;
-            object-fit: cover;
         }
 
-        @media (max-width: 768px) {
-            #brand-logo { font-size: 3.5rem; }
-            .icon-menu-row { width: 95%; gap: 15px; }
-            .icon-label { font-size: 0.75rem; }
-            .game-display-box { height: 320px; max-width: 90%; }
+        /* Outfit Display Frame */
+        .display-frame {
+            background: #ede6c9;
+            border: 2px solid #333;
+            width: 300px;
+            height: 400px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            box-shadow: 8px 8px 0px #333;
+            position: relative;
+        }
+
+        .display-frame img {
+            max-width: 80%;
+            max-height: 250px;
+            object-fit: contain;
+            margin-bottom: 15px;
+        }
+
+        .item-label {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        /* Controls Area */
+        .controls {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            width: 280px;
+        }
+
+        .game-btn {
+            background-color: #333;
+            color: #ede6c9;
+            border: none;
+            padding: 14px 24px;
+            font-size: 1rem;
+            font-family: inherit;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 4px 4px 0px #777;
+        }
+
+        .game-btn:hover {
+            background-color: #555;
+            transform: translate(-2px, -2px);
+            box-shadow: 6px 6px 0px #777;
+        }
+
+        .game-btn:active {
+            transform: translate(0, 0);
+            box-shadow: 2px 2px 0px #777;
+        }
+
+        .score-board {
+            margin-top: 30px;
+            font-size: 1.2rem;
+            letter-spacing: 1px;
         }
     </style>
 </head>
 <body>
 
-    <div class="main-scroll-container" id="scroll-wrapper">
-        
-        <!-- SECTION 1: Welcome Screen -->
-        <div class="section-view" id="landing-view">
-            
-            <h1 id="brand-logo" onclick="revealDashboard()">RALLI.</h1>
+    <!-- HERO SECTION (Centered RALLI Logo) -->
+    <section class="hero-section">
+        <!-- Displaying logo image if available, fallback to text styling -->
+        <div class="logo-container">
+            <img src="logo.png" alt="RALLI" onerror="this.style.display='none'; document.getElementById('alt-title').style.display='block';">
+            <h1 id="alt-title" class="hero-title" style="display:none;">RALLI.</h1>
+        </div>
+        <div class="scroll-indicator">↓ Scroll to Play ↓</div>
+    </section>
 
-            <div class="icon-menu-row" id="menu-row">
-                <!-- Icon 1: Journey -->
-                <div class="icon-wrapper">
-                    <div class="icon-square">
-                        <img src="icon1.jpeg" alt="Journey">
-                    </div>
-                    <span class="icon-label">Journey</span>
-                </div>
+    <!-- GAME SECTION -->
+    <section class="game-section" id="game">
+        <h2 class="game-title">RALLI Studio</h2>
+        <p class="game-subtitle">Mix, Match & Style Sustainable Pieces</p>
 
-                <!-- Icon 2: Concept (Shifted to Middle) -->
-                <div class="icon-wrapper">
-                    <div class="icon-square">
-                        <img src="icon3.jpg" alt="Concept">
-                    </div>
-                    <span class="icon-label">Concept</span>
-                </div>
-
-                <!-- Icon 3: Your Role -->
-                <div class="icon-wrapper">
-                    <div class="icon-square">
-                        <img src="icon2.jpeg" alt="Your Role">
-                    </div>
-                    <span class="icon-label">Your Role</span>
-                </div>
+        <div class="game-container">
+            <!-- Outfit Display Box -->
+            <div class="display-frame">
+                <img id="outfit-img" src="jeans-box.png" alt="RALLI Piece" onerror="this.src='gameicon.jpg'">
+                <div class="item-label" id="item-name">Upcycled Denim Jeans</div>
             </div>
 
-            <div class="scroll-prompt" id="scroll-hint">↓ Scroll to play game</div>
-        </div>
-
-        <!-- SECTION 2: Scroll Content Area -->
-        <div class="section-view" id="game-view">
-            <h2 class="game-title">Play Game</h2>
-            
-            <div class="game-display-box">
-                <img src="journey-sketch.jpg" alt="Ralli Interactive Showcase Frame">
+            <!-- Game Control Buttons -->
+            <div class="controls">
+                <button class="game-btn" onclick="nextPiece()">Next Piece ↻</button>
+                <button class="game-btn" onclick="stylePiece()">Style This Look ✨</button>
+                <button class="game-btn" onclick="randomize()">Random Outfit 🎲</button>
             </div>
         </div>
 
-    </div>
+        <div class="score-board">
+            Styled Outfits: <span id="outfit-count">0</span>
+        </div>
+    </section>
 
     <script>
-        function revealDashboard() {
-            const scrollWrapper = document.getElementById('scroll-wrapper');
-            const logo = document.getElementById('brand-logo');
-            const menuRow = document.getElementById('menu-row');
-            const scrollHint = document.getElementById('scroll-hint');
+        // Item collection based on files in repository
+        const inventory = [
+            { name: "Upcycled Denim Jeans", img: "jeans-box.png" },
+            { name: "Vintage Newspaper Top", img: "newspaper-box.png" },
+            { name: "Eco Combo Set", img: "combo-box.png" },
+            { name: "Mannequin Display Piece", img: "mannequin-view.png" },
+            { name: "RALLI Pick Box", img: "pickabox.jpeg" }
+        ];
 
-            logo.classList.add('hidden');
-            menuRow.classList.add('visible');
-            scrollHint.classList.add('visible');
+        let currentIndex = 0;
+        let count = 0;
 
-            scrollWrapper.style.overflowY = 'auto';
+        function updateDisplay() {
+            const item = inventory[currentIndex];
+            document.getElementById('outfit-img').src = item.img;
+            document.getElementById('item-name').innerText = item.name;
+        }
+
+        function nextPiece() {
+            currentIndex = (currentIndex + 1) % inventory.length;
+            updateDisplay();
+        }
+
+        function stylePiece() {
+            count++;
+            document.getElementById('outfit-count').innerText = count;
+            alert('Styled! Added ' + inventory[currentIndex].name + ' to your collection.');
+        }
+
+        function randomize() {
+            currentIndex = Math.floor(Math.random() * inventory.length);
+            updateDisplay();
         }
     </script>
-
 </body>
 </html>
