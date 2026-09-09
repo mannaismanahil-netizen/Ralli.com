@@ -4,135 +4,375 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RALLI</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=Montserrat:wght@300;400&display=swap" rel="stylesheet">
+    
     <style>
-        /* Base Canvas Settings */
-        body {
-            background-color: #ede6c9;
+        body, html {
             margin: 0;
             padding: 0;
-            color: #333;
+            min-height: 100%;
+            width: 100%;
+            background-color: #F3E6BD; /* Pearl Beige */
+            font-family: 'Playfair Display', Georgia, serif;
+            -webkit-font-smoothing: antialiased;
+            color: #260808; /* Graphite */
+        }
+
+        .stage-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            width: 100%;
+            box-sizing: border-box;
+            padding: 40px 20px;
+            position: relative;
+        }
+
+        /* 1. START SCREEN */
+        #brand-logo {
+            font-size: 5.5rem;
+            font-weight: 500;
+            letter-spacing: 6px;
+            text-transform: uppercase;
+            margin: 0;
+            cursor: pointer;
+            user-select: none;
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        .fade-out {
+            opacity: 0;
+            transform: scale(0.95);
+            pointer-events: none;
+        }
+
+        /* 2. GAME MENU LAYER */
+        .game-layer {
+            position: absolute;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.8s ease;
+            width: 100%;
+            max-width: 600px;
+        }
+
+        .game-layer.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .journey-card {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            width: 100%;
+            text-align: center;
+            transition: transform 0.4s ease;
+        }
+
+        .journey-card:hover {
+            transform: scale(1.02);
+        }
+
+        .journey-card img {
+            width: 100%;
+            max-height: 60vh;
+            object-fit: cover;
+            border-radius: 2px;
+            box-shadow: 0 15px 35px rgba(38, 8, 8, 0.15);
+            border: 1px solid rgba(38, 8, 8, 0.1);
+        }
+
+        .card-label {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            font-style: italic;
+            margin-top: 20px;
+            color: #260808;
+            display: block;
+        }
+
+        /* 3. RIGHT-ALIGNED ICONS BAR */
+        .right-icon-bar {
+            position: fixed;
+            right: 30px;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            z-index: 10;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.6s ease;
+        }
+
+        .right-icon-bar.visible {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .icon-item {
+            width: 65px;
+            height: 65px;
+            border-radius: 50%;
+            border: 1px solid rgba(38, 8, 8, 0.25);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            background-color: #F3E6BD;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: 0 8px 20px rgba(38, 8, 8, 0.08);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .icon-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: grayscale(20%) brightness(0.95);
+            transition: transform 0.4s ease, filter 0.4s ease;
+        }
+
+        .icon-label {
+            position: absolute;
+            bottom: 4px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.55rem;
+            font-weight: 400;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            background-color: rgba(243, 230, 189, 0.9);
+            padding: 2px 4px;
+            border-radius: 2px;
+            color: #260808;
+        }
+
+        .icon-item:hover {
+            transform: translateX(-8px) scale(1.05);
+            border-color: #260808;
+        }
+
+        .icon-item:hover img {
+            transform: scale(1.1);
+            filter: grayscale(0%) brightness(1);
+        }
+
+        /* 4. DYNAMIC CONTENT VIEWS (Story & Role) */
+        .content-panel {
+            display: none;
+            opacity: 0;
+            width: 100%;
+            max-width: 750px;
+            transition: opacity 0.6s ease;
+            text-align: left;
+        }
+
+        .content-panel.active {
+            display: block;
+            opacity: 1;
+        }
+
+        .panel-header {
+            font-size: 3rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 30px;
             text-align: center;
         }
 
-        /* Initial Full-Screen Entry Text View */
-        .hero-section {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
+        .panel-text {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1rem;
+            line-height: 1.8;
+            font-weight: 300;
+            margin-bottom: 30px;
+            opacity: 0.9;
+        }
+
+        .story-gallery {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+            margin-top: 40px;
+            margin-bottom: 40px;
+        }
+
+        .image-wrapper {
+            overflow: hidden;
+            border-radius: 2px;
+            box-shadow: 0 12px 28px rgba(38, 8, 8, 0.12); 
+            border: 1px solid rgba(38, 8, 8, 0.15);
+            background-color: #260808;
+        }
+
+        .image-wrapper img {
             width: 100%;
-            cursor: pointer;
-        }
-
-        /* Content Layout: 3 Cards Block (Journey, Concept, Your Role) */
-        .main-container {
-            display: none; /* Hidden until you click the text */
-            justify-content: center;
-            align-items: flex-start;
-            gap: 40px;
-            padding: 80px 20px 40px 20px;
-            max-width: 1200px;
-            margin: 0 auto;
-            box-sizing: border-box;
-        }
-
-        .card {
-            flex: 1;
-            max-width: 350px;
-        }
-
-        .card img {
-            width: 100%;
-            height: auto;
-            aspect-ratio: 1 / 1;
+            height: 350px;
+            display: block;
             object-fit: cover;
-            border: 1px solid #333;
+            transition: transform 0.5s ease;
         }
 
-        /* Scroll Indicator */
-        .scroll-hint {
-            display: none; /* Hidden until click */
-            font-size: 12px;
-            letter-spacing: 4px;
+        .image-wrapper:hover img {
+            transform: scale(1.03);
+        }
+
+        .back-btn {
+            font-family: 'Montserrat', sans-serif;
+            background: none;
+            border: 1px solid #260808;
+            color: #260808;
+            padding: 10px 20px;
             text-transform: uppercase;
-            margin: 40px 0;
-            color: #666;
-        }
-
-        /* Half-Screen Game Section Focus */
-        .game-section {
-            display: none; /* Hidden until click */
-            height: 50vh; /* Takes up exactly half the screen */
-            justify-content: center;
-            align-items: center;
-            padding-bottom: 50px;
-            box-sizing: border-box;
-        }
-
-        .game-play-btn img {
-            height: 80%; /* Fits the gameicon comfortably within the half-screen block */
-            width: auto;
+            font-size: 0.8rem;
+            letter-spacing: 2px;
             cursor: pointer;
-            object-fit: contain;
+            margin-bottom: 40px;
+            transition: all 0.3s ease;
         }
 
-        /* --- STATE LOGIC TRIGGERED BY CLICK --- */
-        /* When clicked: hide text header, activate flex displays for layout items */
-        body.revealed .hero-section {
-            display: none;
+        .back-btn:hover {
+            background-color: #260808;
+            color: #F3E6BD;
         }
 
-        body.revealed .main-container,
-        body.revealed .scroll-hint,
-        body.revealed .game-section {
-            display: flex;
+        @media (max-width: 768px) {
+            #brand-logo { font-size: 3.5rem; }
+            .panel-header { font-size: 2.2rem; }
+            .story-gallery { grid-template-columns: 1fr; }
+            .right-icon-bar {
+                position: static;
+                transform: none;
+                flex-direction: row;
+                justify-content: center;
+                margin-top: 30px;
+            }
         }
     </style>
 </head>
 <body>
 
-    <!-- Step 1: Initial RALLI Title View -->
-    <header class="hero-section" id="hero">
-        <h1 style="font-size: 48px; letter-spacing: 12px; font-weight: normal; margin: 0;">RALLI</h1>
-    </header>
-
-    <!-- Step 2: Core Section Columns (Shown after text click) -->
-    <main class="main-container">
-        <!-- Journey Card -->
-        <div class="card">
-            <img src="icon1.jpeg" alt="Journey">
-            <h3 style="margin-top: 15px; font-size: 16px; font-weight: normal; letter-spacing: 2px; text-transform: uppercase;">Journey</h3>
+    <!-- Navigation Icon Bar -->
+    <div class="right-icon-bar" id="icon-bar">
+        <div class="icon-item" title="Icon 1">
+            <span style="font-family:'Montserrat'; font-size:0.7rem;">icn 1</span>
         </div>
-
-        <!-- Concept Card -->
-        <div class="card">
-            <img src="icon2.jpeg" alt="Concept">
-            <h3 style="margin-top: 15px; font-size: 16px; font-weight: normal; letter-spacing: 2px; text-transform: uppercase;">Concept</h3>
+        
+        <!-- Icon 2: Your Role (Using mehndi.jpg) -->
+        <div class="icon-item" title="Your Role" onclick="openSection('role-view')">
+            <img src="icon-role.jpg" alt="Your Role">
+            <span class="icon-label">role</span>
         </div>
-
-        <!-- Your Role Card -->
-        <div class="card">
-            <img src="icon3.jpg" alt="Your Role">
-            <h3 style="margin-top: 15px; font-size: 16px; font-weight: normal; letter-spacing: 2px; text-transform: uppercase;">Your Role</h3>
+        
+        <div class="icon-item" title="Icon 3">
+            <span style="font-family:'Montserrat'; font-size:0.7rem;">icn 3</span>
         </div>
-    </main>
-
-    <!-- Step 3: Scroll Indicator and Half-Screen Game View -->
-    <div class="scroll-hint">
-        ↓ Scroll to play game
     </div>
 
-    <section class="game-section">
-        <a href="#" class="game-play-btn">
-            <img src="gameicon.jpg" alt="Play Game">
-        </a>
-    </section>
+    <div class="stage-container">
+        
+        <!-- LAYER 1: Title Screen -->
+        <h1 id="brand-logo" onclick="startExperience()">RALLI.</h1>
 
-    <!-- Click handler to transition layout states -->
+        <!-- LAYER 2: Game Menu -->
+        <div class="game-layer" id="menu-view">
+            <button class="journey-card" onclick="openSection('story-view')">
+                <img src="journey-sketch.jpg" alt="Our Journey Sketches">
+                <span class="card-label">our journey</span>
+            </button>
+        </div>
+
+        <!-- LAYER 3a: Our Journey Panel -->
+        <div class="content-panel" id="story-view">
+            <button class="back-btn" onclick="goBackToMenu()">← Back</button>
+            <h2 class="panel-header">Our Journey</h2>
+            
+            <p class="panel-text">
+                This is where we pair your narrative directly with the concept art. Below, the mood imagery and technical sketches line up side-by-side to introduce the visual world of RALLI.
+            </p>
+
+            <div class="story-gallery">
+                <div class="image-wrapper">
+                    <img src="icon-role.jpg" alt="RALLI Color & Heritage Inspiration">
+                </div>
+                <div class="image-wrapper">
+                    <img src="journey-sketch.jpg" alt="RALLI Design Production Process">
+                </div>
+            </div>
+        </div>
+
+        <!-- LAYER 3b: Your Role Panel -->
+        <div class="content-panel" id="role-view">
+            <button class="back-btn" onclick="goBackToMenu()">← Back</button>
+            <h2 class="panel-header">Your Role</h2>
+            
+            <p class="panel-text">
+                Provide the text layout explaining your distinct contributions, design leadership, and operational steps in bringing the RALLI project concept to life.
+            </p>
+        </div>
+
+    </div>
+
     <script>
-        document.getElementById('hero').addEventListener('click', function() {
-            document.body.classList.add('revealed');
-        });
+        const logo = document.getElementById('brand-logo');
+        const menuView = document.getElementById('menu-view');
+        const iconBar = document.getElementById('icon-bar');
+        const panels = document.querySelectorAll('.content-panel');
+
+        function startExperience() {
+            logo.classList.add('fade-out');
+            setTimeout(() => {
+                logo.style.display = 'none';
+                menuView.style.display = 'flex';
+                setTimeout(() => {
+                    menuView.classList.add('active');
+                    iconBar.classList.add('visible');
+                }, 50);
+            }, 600);
+        }
+
+        function openSection(sectionId) {
+            // Hide menu if visible
+            menuView.classList.remove('active');
+            menuView.style.display = 'none';
+            
+            // Hide any other active panels
+            panels.forEach(panel => {
+                panel.classList.remove('active');
+                panel.style.display = 'none';
+            });
+
+            // Show target panel
+            const target = document.getElementById(sectionId);
+            target.style.display = 'block';
+            setTimeout(() => {
+                target.classList.add('active');
+            }, 50);
+        }
+
+        function goBackToMenu() {
+            panels.forEach(panel => {
+                panel.classList.remove('active');
+                setTimeout(() => {
+                    panel.style.display = 'none';
+                    menuView.style.display = 'flex';
+                    setTimeout(() => {
+                        menuView.classList.add('active');
+                    }, 50);
+                }, 400);
+            });
+        }
     </script>
 
 </body>
