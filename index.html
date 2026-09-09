@@ -6,32 +6,42 @@
     <title>RALLI</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=Montserrat:wght@300;400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
     
     <style>
         body, html {
             margin: 0;
             padding: 0;
-            min-height: 100%;
             width: 100%;
+            height: 100%;
             background-color: #F3E6BD; /* Pearl Beige */
             font-family: 'Playfair Display', Georgia, serif;
             -webkit-font-smoothing: antialiased;
             color: #260808; /* Graphite */
         }
 
-        .stage-container {
+        .main-scroll-container {
+            width: 100%;
+            height: 100%;
+            overflow-y: hidden;
+            scroll-behavior: smooth;
+        }
+
+        .section-view {
+            width: 100%;
+            height: 100vh;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
-            width: 100%;
             box-sizing: border-box;
-            padding: 40px 20px;
+            padding: 20px;
             position: relative;
         }
 
-        /* 1. START SCREEN */
+        /* ----------------------------------
+           SECTION 1: LANDING & DASHBOARD
+        ---------------------------------- */
         #brand-logo {
             font-size: 5.5rem;
             font-weight: 500;
@@ -40,338 +50,210 @@
             margin: 0;
             cursor: pointer;
             user-select: none;
-            transition: opacity 0.6s ease, transform 0.6s ease;
+            opacity: 1;
+            transition: opacity 0.4s ease, transform 0.4s ease;
         }
 
-        .fade-out {
+        #brand-logo.hidden {
             opacity: 0;
             transform: scale(0.95);
             pointer-events: none;
-        }
-
-        /* 2. GAME MENU LAYER */
-        .game-layer {
             position: absolute;
-            display: none;
-            flex-direction: column;
-            align-items: center;
-            opacity: 0;
-            transition: opacity 0.8s ease;
-            width: 100%;
-            max-width: 600px;
         }
 
-        .game-layer.active {
+        /* Large horizontal row taking up most of the screen width */
+        .icon-menu-row {
             display: flex;
-            opacity: 1;
-        }
-
-        .journey-card {
-            background: none;
-            border: none;
-            cursor: pointer;
-            padding: 0;
-            width: 100%;
-            text-align: center;
-            transition: transform 0.4s ease;
-        }
-
-        .journey-card:hover {
-            transform: scale(1.02);
-        }
-
-        .journey-card img {
-            width: 100%;
-            max-height: 60vh;
-            object-fit: cover;
-            border-radius: 2px;
-            box-shadow: 0 15px 35px rgba(38, 8, 8, 0.15);
-            border: 1px solid rgba(38, 8, 8, 0.1);
-        }
-
-        .card-label {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.8rem;
-            font-style: italic;
-            margin-top: 20px;
-            color: #260808;
-            display: block;
-        }
-
-        /* 3. RIGHT-ALIGNED ICONS BAR */
-        .right-icon-bar {
-            position: fixed;
-            right: 30px;
-            top: 50%;
-            transform: translateY(-50%);
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-            z-index: 10;
+            width: 90%;
+            max-width: 1400px;
+            justify-content: center;
+            gap: 5%;
             opacity: 0;
+            transform: translateY(30px);
             pointer-events: none;
-            transition: opacity 0.6s ease;
+            transition: opacity 0.8s ease 0.1s, transform 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.1s;
         }
 
-        .right-icon-bar.visible {
+        .icon-menu-row.visible {
             opacity: 1;
+            transform: translateY(0);
             pointer-events: auto;
         }
 
-        .icon-item {
-            width: 65px;
-            height: 65px;
-            border-radius: 50%;
-            border: 1px solid rgba(38, 8, 8, 0.25);
+        .icon-wrapper {
             display: flex;
             flex-direction: column;
-            justify-content: center;
             align-items: center;
+            gap: 20px;
+            flex: 1;
+            max-width: 380px; /* Limits maximum scaling on giant desktop displays */
+            text-decoration: none;
+            color: #260808;
             cursor: pointer;
-            background-color: #F3E6BD;
-            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-            box-shadow: 0 8px 20px rgba(38, 8, 8, 0.08);
-            overflow: hidden;
-            position: relative;
         }
 
-        .icon-item img {
+        /* MASSIVE SQUARES: Responsive sizing based on viewport width */
+        .icon-square {
+            width: 100%;
+            aspect-ratio: 1 / 1; /* Maintains a perfect sharp square dynamically */
+            border: 1px solid rgba(38, 8, 8, 0.2);
+            background-color: rgba(38, 8, 8, 0.02);
+            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(38, 8, 8, 0.05);
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.4s ease, box-shadow 0.4s ease;
+        }
+
+        .icon-square img {
             width: 100%;
             height: 100%;
-            object-fit: cover;
-            filter: grayscale(20%) brightness(0.95);
-            transition: transform 0.4s ease, filter 0.4s ease;
-        }
-
-        .icon-label {
-            position: absolute;
-            bottom: 4px;
-            font-family: 'Montserrat', sans-serif;
-            font-size: 0.55rem;
-            font-weight: 400;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            background-color: rgba(243, 230, 189, 0.9);
-            padding: 2px 4px;
-            border-radius: 2px;
-            color: #260808;
-        }
-
-        .icon-item:hover {
-            transform: translateX(-8px) scale(1.05);
-            border-color: #260808;
-        }
-
-        .icon-item:hover img {
-            transform: scale(1.1);
-            filter: grayscale(0%) brightness(1);
-        }
-
-        /* 4. DYNAMIC CONTENT VIEWS (Story & Role) */
-        .content-panel {
-            display: none;
-            opacity: 0;
-            width: 100%;
-            max-width: 750px;
-            transition: opacity 0.6s ease;
-            text-align: left;
-        }
-
-        .content-panel.active {
-            display: block;
-            opacity: 1;
-        }
-
-        .panel-header {
-            font-size: 3rem;
-            font-weight: 500;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            margin-bottom: 30px;
-            text-align: center;
-        }
-
-        .panel-text {
-            font-family: 'Montserrat', sans-serif;
-            font-size: 1rem;
-            line-height: 1.8;
-            font-weight: 300;
-            margin-bottom: 30px;
-            opacity: 0.9;
-        }
-
-        .story-gallery {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 25px;
-            margin-top: 40px;
-            margin-bottom: 40px;
-        }
-
-        .image-wrapper {
-            overflow: hidden;
-            border-radius: 2px;
-            box-shadow: 0 12px 28px rgba(38, 8, 8, 0.12); 
-            border: 1px solid rgba(38, 8, 8, 0.15);
-            background-color: #260808;
-        }
-
-        .image-wrapper img {
-            width: 100%;
-            height: 350px;
-            display: block;
             object-fit: cover;
             transition: transform 0.5s ease;
         }
 
-        .image-wrapper:hover img {
-            transform: scale(1.03);
-        }
-
-        .back-btn {
+        .icon-label {
             font-family: 'Montserrat', sans-serif;
-            background: none;
-            border: 1px solid #260808;
-            color: #260808;
-            padding: 10px 20px;
-            text-transform: uppercase;
-            font-size: 0.8rem;
+            font-size: 0.9rem;
+            font-weight: 400;
+            text-transform: lowercase;
             letter-spacing: 2px;
-            cursor: pointer;
-            margin-bottom: 40px;
-            transition: all 0.3s ease;
+            opacity: 0.7;
+            transition: opacity 0.3s ease, letter-spacing 0.3s ease;
         }
 
-        .back-btn:hover {
-            background-color: #260808;
-            color: #F3E6BD;
+        /* Hover interactions */
+        .icon-wrapper:hover .icon-square {
+            transform: translateY(-8px) scale(1.02);
+            border-color: #260808;
+            box-shadow: 0 25px 50px rgba(38, 8, 8, 0.1);
+        }
+        .icon-wrapper:hover .icon-square img {
+            transform: scale(1.05);
+        }
+        .icon-wrapper:hover .icon-label {
+            opacity: 1;
+            letter-spacing: 3px;
+        }
+
+        .scroll-prompt {
+            position: absolute;
+            bottom: 35px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: opacity 1s ease 0.6s, transform 1s ease 0.6s;
+        }
+        .scroll-prompt.visible {
+            opacity: 0.4;
+            transform: translateY(0);
+        }
+
+        /* ----------------------------------
+           SECTION 2: SCROLL DOWN PLAY GAME
+        ---------------------------------- */
+        #game-view {
+            background-color: #ebdcb2;
+            border-top: 1px solid rgba(38, 8, 8, 0.04);
+        }
+
+        .game-title {
+            font-size: 2.8rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            margin-bottom: 40px;
+        }
+
+        .game-display-box {
+            width: 100%;
+            max-width: 750px;
+            height: 500px;
+            background-color: rgba(38, 8, 8, 0.02);
+            border: 1px solid rgba(38, 8, 8, 0.15);
+            box-shadow: 0 20px 45px rgba(38, 8, 8, 0.08);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .game-display-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
 
         @media (max-width: 768px) {
             #brand-logo { font-size: 3.5rem; }
-            .panel-header { font-size: 2.2rem; }
-            .story-gallery { grid-template-columns: 1fr; }
-            .right-icon-bar {
-                position: static;
-                transform: none;
-                flex-direction: row;
-                justify-content: center;
-                margin-top: 30px;
-            }
+            .icon-menu-row { width: 95%; gap: 15px; }
+            .icon-label { font-size: 0.75rem; }
+            .game-display-box { height: 320px; max-width: 90%; }
         }
     </style>
 </head>
 <body>
 
-    <!-- Navigation Icon Bar -->
-    <div class="right-icon-bar" id="icon-bar">
-        <div class="icon-item" title="Icon 1">
-            <span style="font-family:'Montserrat'; font-size:0.7rem;">icn 1</span>
-        </div>
+    <div class="main-scroll-container" id="scroll-wrapper">
         
-        <!-- Icon 2: Your Role (Using mehndi.jpg) -->
-        <div class="icon-item" title="Your Role" onclick="openSection('role-view')">
-            <img src="icon-role.jpg" alt="Your Role">
-            <span class="icon-label">role</span>
-        </div>
-        
-        <div class="icon-item" title="Icon 3">
-            <span style="font-family:'Montserrat'; font-size:0.7rem;">icn 3</span>
-        </div>
-    </div>
-
-    <div class="stage-container">
-        
-        <!-- LAYER 1: Title Screen -->
-        <h1 id="brand-logo" onclick="startExperience()">RALLI.</h1>
-
-        <!-- LAYER 2: Game Menu -->
-        <div class="game-layer" id="menu-view">
-            <button class="journey-card" onclick="openSection('story-view')">
-                <img src="journey-sketch.jpg" alt="Our Journey Sketches">
-                <span class="card-label">our journey</span>
-            </button>
-        </div>
-
-        <!-- LAYER 3a: Our Journey Panel -->
-        <div class="content-panel" id="story-view">
-            <button class="back-btn" onclick="goBackToMenu()">← Back</button>
-            <h2 class="panel-header">Our Journey</h2>
+        <!-- SECTION 1: Welcome Screen -->
+        <div class="section-view" id="landing-view">
             
-            <p class="panel-text">
-                This is where we pair your narrative directly with the concept art. Below, the mood imagery and technical sketches line up side-by-side to introduce the visual world of RALLI.
-            </p>
+            <h1 id="brand-logo" onclick="revealDashboard()">RALLI.</h1>
 
-            <div class="story-gallery">
-                <div class="image-wrapper">
-                    <img src="icon-role.jpg" alt="RALLI Color & Heritage Inspiration">
+            <div class="icon-menu-row" id="menu-row">
+                <!-- Icon 1: Journey -->
+                <div class="icon-wrapper">
+                    <div class="icon-square">
+                        <img src="icon1.jpg" alt="Journey">
+                    </div>
+                    <span class="icon-label">journey</span>
                 </div>
-                <div class="image-wrapper">
-                    <img src="journey-sketch.jpg" alt="RALLI Design Production Process">
+
+                <!-- Icon 2: Your Role -->
+                <div class="icon-wrapper">
+                    <div class="icon-square">
+                        <img src="icon-role.jpg" alt="Your Role">
+                    </div>
+                    <span class="icon-label">your role</span>
+                </div>
+
+                <!-- Icon 3: Concept -->
+                <div class="icon-wrapper">
+                    <div class="icon-square">
+                        <img src="icon3.jpg" alt="Concept">
+                    </div>
+                    <span class="icon-label">concept</span>
                 </div>
             </div>
+
+            <div class="scroll-prompt" id="scroll-hint">↓ Scroll to play game</div>
         </div>
 
-        <!-- LAYER 3b: Your Role Panel -->
-        <div class="content-panel" id="role-view">
-            <button class="back-btn" onclick="goBackToMenu()">← Back</button>
-            <h2 class="panel-header">Your Role</h2>
+        <!-- SECTION 2: Scroll Content Area -->
+        <div class="section-view" id="game-view">
+            <h2 class="game-title">Play Game</h2>
             
-            <p class="panel-text">
-                Provide the text layout explaining your distinct contributions, design leadership, and operational steps in bringing the RALLI project concept to life.
-            </p>
+            <div class="game-display-box">
+                <img src="journey-sketch.jpg" alt="Ralli Interactive Showcase Frame">
+            </div>
         </div>
 
     </div>
 
     <script>
-        const logo = document.getElementById('brand-logo');
-        const menuView = document.getElementById('menu-view');
-        const iconBar = document.getElementById('icon-bar');
-        const panels = document.querySelectorAll('.content-panel');
+        function revealDashboard() {
+            const scrollWrapper = document.getElementById('scroll-wrapper');
+            const logo = document.getElementById('brand-logo');
+            const menuRow = document.getElementById('menu-row');
+            const scrollHint = document.getElementById('scroll-hint');
 
-        function startExperience() {
-            logo.classList.add('fade-out');
-            setTimeout(() => {
-                logo.style.display = 'none';
-                menuView.style.display = 'flex';
-                setTimeout(() => {
-                    menuView.classList.add('active');
-                    iconBar.classList.add('visible');
-                }, 50);
-            }, 600);
-        }
+            logo.classList.add('hidden');
+            menuRow.classList.add('visible');
+            scrollHint.classList.add('visible');
 
-        function openSection(sectionId) {
-            // Hide menu if visible
-            menuView.classList.remove('active');
-            menuView.style.display = 'none';
-            
-            // Hide any other active panels
-            panels.forEach(panel => {
-                panel.classList.remove('active');
-                panel.style.display = 'none';
-            });
-
-            // Show target panel
-            const target = document.getElementById(sectionId);
-            target.style.display = 'block';
-            setTimeout(() => {
-                target.classList.add('active');
-            }, 50);
-        }
-
-        function goBackToMenu() {
-            panels.forEach(panel => {
-                panel.classList.remove('active');
-                setTimeout(() => {
-                    panel.style.display = 'none';
-                    menuView.style.display = 'flex';
-                    setTimeout(() => {
-                        menuView.classList.add('active');
-                    }, 50);
-                }, 400);
-            });
+            scrollWrapper.style.overflowY = 'auto';
         }
     </script>
 
