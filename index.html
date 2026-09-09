@@ -4,104 +4,178 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RALLI</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+    
     <style>
-        /* Base Settings */
-        * {
-            box-sizing: border-box;
+        body, html {
             margin: 0;
             padding: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #F3E6BD; /* Pearl Beige */
+            font-family: 'Playfair Display', Georgia, serif;
+            -webkit-font-smoothing: antialiased;
+            color: #260808; /* Graphite */
+            overflow: hidden;
         }
 
-        body {
-            background-color: #ede6c9;
-            color: #333;
-            font-family: 'Times New Roman', Times, serif;
-            text-align: center;
-        }
-
-        /* Hero Section - Perfectly Centered RALLI */
-        .hero-section {
+        .section-view {
+            width: 100%;
+            height: 100vh;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            width: 100%;
-        }
-
-        .hero-title {
-            font-size: 5rem;
-            letter-spacing: 0.15em;
-            font-weight: bold;
-        }
-
-        /* Content Layout: 3 Cards Block */
-        .main-container {
-            display: flex;
-            justify-content: center;
-            gap: 30px;
-            padding: 60px 20px;
-            flex-wrap: wrap;
-        }
-
-        .card {
-            background-color: #e3dac1;
-            border: 1px solid #333;
+            box-sizing: border-box;
             padding: 20px;
-            width: 260px;
-            border-radius: 8px;
-            box-shadow: 4px 4px 0px #333;
-            transition: transform 0.2s;
+            position: relative;
         }
 
-        .card:hover {
-            transform: translateY(-5px);
-        }
-
-        .card img {
-            width: 100%;
-            height: 180px;
-            object-fit: cover;
-            border-radius: 4px;
-            margin-bottom: 15px;
-        }
-
-        .card h3 {
-            font-size: 1.4rem;
-            margin-bottom: 10px;
+        /* ----------------------------------
+           LANDING & DASHBOARD
+        ---------------------------------- */
+        #brand-logo {
+            font-size: 5.5rem;
+            font-weight: 500;
+            letter-spacing: 6px;
             text-transform: uppercase;
+            margin: 0;
+            cursor: pointer;
+            user-select: none;
+            opacity: 1;
+            transition: opacity 0.4s ease, transform 0.4s ease;
         }
 
-        .card p {
+        #brand-logo.hidden {
+            opacity: 0;
+            transform: scale(0.95);
+            pointer-events: none;
+            position: absolute;
+        }
+
+        .icon-menu-row {
+            display: flex;
+            width: 96%;
+            max-width: 1600px;
+            justify-content: center;
+            gap: 4%;
+            opacity: 0;
+            transform: translateY(30px);
+            pointer-events: none;
+            transition: opacity 0.8s ease 0.1s, transform 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.1s;
+        }
+
+        .icon-menu-row.visible {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+
+        .icon-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            flex: 1;
+            max-width: 440px;
+            text-decoration: none;
+            color: #260808;
+            cursor: pointer;
+        }
+
+        .icon-square {
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            border: 1px solid rgba(38, 8, 8, 0.2);
+            background-color: rgba(38, 8, 8, 0.02);
+            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(38, 8, 8, 0.05);
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.4s ease, box-shadow 0.4s ease;
+        }
+
+        .icon-square img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .icon-label {
+            font-family: 'Montserrat', sans-serif;
             font-size: 0.95rem;
-            line-height: 1.4;
+            font-weight: 400;
+            letter-spacing: 2px;
+            opacity: 0.7;
+            transition: opacity 0.3s ease, letter-spacing 0.3s ease;
+        }
+
+        /* Hover interactions */
+        .icon-wrapper:hover .icon-square {
+            transform: translateY(-8px) scale(1.02);
+            border-color: #260808;
+            box-shadow: 0 25px 50px rgba(38, 8, 8, 0.1);
+        }
+        .icon-wrapper:hover .icon-square img {
+            transform: scale(1.05);
+        }
+        .icon-wrapper:hover .icon-label {
+            opacity: 1;
+            letter-spacing: 3px;
+        }
+
+        @media (max-width: 768px) {
+            #brand-logo { font-size: 3.5rem; }
+            .icon-menu-row { width: 95%; gap: 15px; }
+            .icon-label { font-size: 0.75rem; }
         }
     </style>
 </head>
 <body>
 
-    <!-- Centered RALLI Text Screen -->
-    <section class="hero-section">
-        <h1 class="hero-title">RALLI.</h1>
-    </section>
+    <!-- Welcome Screen -->
+    <div class="section-view" id="landing-view">
+        
+        <h1 id="brand-logo" onclick="revealDashboard()">RALLI.</h1>
 
-    <!-- 3 Cards Block -->
-    <section class="main-container">
-        <div class="card">
-            <img src="icon1.jpeg" alt="Journey">
-            <h3>Journey</h3>
-            <p>Exploring sustainable fashion and building conscious clothing habits step by step.</p>
+        <div class="icon-menu-row" id="menu-row">
+            <!-- Icon 1: Journey -->
+            <div class="icon-wrapper">
+                <div class="icon-square">
+                    <img src="icon1.jpeg" alt="Journey">
+                </div>
+                <span class="icon-label">Journey</span>
+            </div>
+
+            <!-- Icon 2: Concept -->
+            <div class="icon-wrapper">
+                <div class="icon-square">
+                    <img src="icon3.jpg" alt="Concept">
+                </div>
+                <span class="icon-label">Concept</span>
+            </div>
+
+            <!-- Icon 3: Your Role -->
+            <div class="icon-wrapper">
+                <div class="icon-square">
+                    <img src="icon2.jpeg" alt="Your Role">
+                </div>
+                <span class="icon-label">Your Role</span>
+            </div>
         </div>
-        <div class="card">
-            <img src="icon2.jpeg" alt="Concept">
-            <h3>Concept</h3>
-            <p>Redefining style through upcycling, minimal footprint, and long-lasting design.</p>
-        </div>
-        <div class="card">
-            <img src="icon3.jpeg" alt="Your Role">
-            <h3>Your Role</h3>
-            <p>Join the movement, customize your fits, and shape the future of sustainable culture.</p>
-        </div>
-    </section>
+
+    </div>
+
+    <script>
+        function revealDashboard() {
+            const logo = document.getElementById('brand-logo');
+            const menuRow = document.getElementById('menu-row');
+
+            logo.classList.add('hidden');
+            menuRow.classList.add('visible');
+        }
+    </script>
 
 </body>
 </html>
