@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RALLI</title>
     <style>
-        /* Base Canvas Settings */
+        /* Base Settings */
         * {
             box-sizing: border-box;
             margin: 0;
@@ -19,10 +19,9 @@
             text-align: center;
         }
 
-        /* Initial Full-Screen Entry Text View - Centered */
+        /* Hero Section - Perfectly Centered RALLI */
         .hero-section {
             display: flex;
-            flex-direction: column;
             justify-content: center;
             align-items: center;
             height: 100vh;
@@ -76,80 +75,11 @@
             font-size: 0.95rem;
             line-height: 1.4;
         }
-
-        /* Game Section */
-        .game-section {
-            padding: 80px 20px;
-            background-color: #dfd6b8;
-            border-top: 2px solid #333;
-        }
-
-        .game-title {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
-
-        .game-desc {
-            font-size: 1.1rem;
-            margin-bottom: 30px;
-            font-style: italic;
-        }
-
-        .game-box {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            max-width: 400px;
-            margin: 0 auto;
-            background: #ede6c9;
-            border: 2px solid #333;
-            padding: 25px;
-            box-shadow: 6px 6px 0px #333;
-        }
-
-        .game-display img {
-            width: 220px;
-            height: 220px;
-            object-fit: contain;
-            margin-bottom: 15px;
-            border: 1px solid #777;
-            background: #fff;
-        }
-
-        .item-title {
-            font-weight: bold;
-            font-size: 1.2rem;
-            margin-bottom: 20px;
-        }
-
-        .game-actions {
-            display: flex;
-            gap: 15px;
-        }
-
-        .game-btn {
-            background-color: #333;
-            color: #ede6c9;
-            border: none;
-            padding: 10px 20px;
-            font-size: 1rem;
-            font-family: inherit;
-            cursor: pointer;
-            box-shadow: 3px 3px 0px #666;
-        }
-
-        .game-btn:active {
-            transform: translate(2px, 2px);
-            box-shadow: 1px 1px 0px #666;
-        }
     </style>
 </head>
 <body>
 
-    <!-- Centered RALLI Text -->
+    <!-- Centered RALLI Text Screen -->
     <section class="hero-section">
         <h1 class="hero-title">RALLI.</h1>
     </section>
@@ -172,45 +102,6 @@
             <p>Join the movement, customize your fits, and shape the future of sustainable culture.</p>
         </div>
     </section>
-
-    <!-- Game Section -->
-    <section class="game-section">
-        <h2 class="game-title">RALLI Studio Game</h2>
-        <p class="game-desc">Mix and match sustainable pieces to create your custom look</p>
-
-        <div class="game-box">
-            <div class="game-display">
-                <img id="game-img" src="jeans-box.png" alt="Piece Display">
-                <div class="item-title" id="game-item-name">Upcycled Denim Jeans</div>
-            </div>
-            <div class="game-actions">
-                <button class="game-btn" onclick="nextItem()">Next Item ↻</button>
-                <button class="game-btn" onclick="selectItem()">Select Fit ✨</button>
-            </div>
-        </div>
-    </section>
-
-    <script>
-        const items = [
-            { name: "Upcycled Denim Jeans", img: "jeans-box.png" },
-            { name: "Vintage Newspaper Top", img: "newspaper-box.png" },
-            { name: "Eco Combo Pack", img: "combo-box.png" },
-            { name: "Mannequin Outfit", img: "mannequin-view.png" },
-            { name: "RALLI Pick Box", img: "pickabox.jpeg" }
-        ];
-
-        let index = 0;
-
-        function nextItem() {
-            index = (index + 1) % items.length;
-            document.getElementById('game-img').src = items[index].img;
-            document.getElementById('game-item-name').innerText = items[index].name;
-        }
-
-        function selectItem() {
-            alert("Selected: " + items[index].name + " for your RALLI look!");
-        }
-    </script>
 
 </body>
 </html>
