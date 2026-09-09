@@ -17,10 +17,9 @@
             color: #333;
             font-family: 'Times New Roman', Times, serif;
             text-align: center;
-            overflow-x: hidden;
         }
 
-        /* Hero Section - Centered RALLI Logo */
+        /* Initial Full-Screen Entry Text View - Centered */
         .hero-section {
             display: flex;
             flex-direction: column;
@@ -30,207 +29,188 @@
             width: 100%;
         }
 
-        .logo-container img {
-            max-width: 250px;
-            height: auto;
-        }
-
         .hero-title {
             font-size: 5rem;
             letter-spacing: 0.15em;
-            font-weight: 700;
-            margin-bottom: 20px;
+            font-weight: bold;
         }
 
-        .scroll-indicator {
-            margin-top: 30px;
-            font-size: 0.9rem;
+        /* Content Layout: 3 Cards Block */
+        .main-container {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            padding: 60px 20px;
+            flex-wrap: wrap;
+        }
+
+        .card {
+            background-color: #e3dac1;
+            border: 1px solid #333;
+            padding: 20px;
+            width: 260px;
+            border-radius: 8px;
+            box-shadow: 4px 4px 0px #333;
+            transition: transform 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            border-radius: 4px;
+            margin-bottom: 15px;
+        }
+
+        .card h3 {
+            font-size: 1.4rem;
+            margin-bottom: 10px;
             text-transform: uppercase;
-            letter-spacing: 2px;
-            color: #666;
-            animation: bounce 2s infinite;
         }
 
-        @keyframes bounce {
-            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
-            40% { transform: translateY(-10px); }
-            60% { transform: translateY(-5px); }
+        .card p {
+            font-size: 0.95rem;
+            line-height: 1.4;
         }
 
         /* Game Section */
         .game-section {
-            min-height: 100vh;
-            padding: 60px 20px;
-            background-color: #e3dac1;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            border-top: 1px solid #d4c8a8;
+            padding: 80px 20px;
+            background-color: #dfd6b8;
+            border-top: 2px solid #333;
         }
 
         .game-title {
-            font-size: 2.2rem;
+            font-size: 2.5rem;
             margin-bottom: 10px;
             text-transform: uppercase;
             letter-spacing: 2px;
         }
 
-        .game-subtitle {
+        .game-desc {
             font-size: 1.1rem;
-            color: #555;
-            margin-bottom: 40px;
+            margin-bottom: 30px;
             font-style: italic;
         }
 
-        .game-container {
+        .game-box {
             display: flex;
-            flex-wrap: wrap;
-            gap: 40px;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
-            max-width: 900px;
-            width: 100%;
-        }
-
-        /* Outfit Display Frame */
-        .display-frame {
+            justify-content: center;
+            max-width: 400px;
+            margin: 0 auto;
             background: #ede6c9;
             border: 2px solid #333;
-            width: 300px;
-            height: 400px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-            box-shadow: 8px 8px 0px #333;
-            position: relative;
+            padding: 25px;
+            box-shadow: 6px 6px 0px #333;
         }
 
-        .display-frame img {
-            max-width: 80%;
-            max-height: 250px;
+        .game-display img {
+            width: 220px;
+            height: 220px;
             object-fit: contain;
             margin-bottom: 15px;
+            border: 1px solid #777;
+            background: #fff;
         }
 
-        .item-label {
-            font-size: 1.2rem;
+        .item-title {
             font-weight: bold;
-            margin-top: 10px;
+            font-size: 1.2rem;
+            margin-bottom: 20px;
         }
 
-        /* Controls Area */
-        .controls {
+        .game-actions {
             display: flex;
-            flex-direction: column;
             gap: 15px;
-            width: 280px;
         }
 
         .game-btn {
             background-color: #333;
             color: #ede6c9;
             border: none;
-            padding: 14px 24px;
+            padding: 10px 20px;
             font-size: 1rem;
             font-family: inherit;
-            letter-spacing: 1px;
             cursor: pointer;
-            transition: all 0.2s ease;
-            box-shadow: 4px 4px 0px #777;
-        }
-
-        .game-btn:hover {
-            background-color: #555;
-            transform: translate(-2px, -2px);
-            box-shadow: 6px 6px 0px #777;
+            box-shadow: 3px 3px 0px #666;
         }
 
         .game-btn:active {
-            transform: translate(0, 0);
-            box-shadow: 2px 2px 0px #777;
-        }
-
-        .score-board {
-            margin-top: 30px;
-            font-size: 1.2rem;
-            letter-spacing: 1px;
+            transform: translate(2px, 2px);
+            box-shadow: 1px 1px 0px #666;
         }
     </style>
 </head>
 <body>
 
-    <!-- HERO SECTION (Centered RALLI Logo) -->
+    <!-- Centered RALLI Text -->
     <section class="hero-section">
-        <!-- Displaying logo image if available, fallback to text styling -->
-        <div class="logo-container">
-            <img src="logo.png" alt="RALLI" onerror="this.style.display='none'; document.getElementById('alt-title').style.display='block';">
-            <h1 id="alt-title" class="hero-title" style="display:none;">RALLI.</h1>
-        </div>
-        <div class="scroll-indicator">↓ Scroll to Play ↓</div>
+        <h1 class="hero-title">RALLI.</h1>
     </section>
 
-    <!-- GAME SECTION -->
-    <section class="game-section" id="game">
-        <h2 class="game-title">RALLI Studio</h2>
-        <p class="game-subtitle">Mix, Match & Style Sustainable Pieces</p>
-
-        <div class="game-container">
-            <!-- Outfit Display Box -->
-            <div class="display-frame">
-                <img id="outfit-img" src="jeans-box.png" alt="RALLI Piece" onerror="this.src='gameicon.jpg'">
-                <div class="item-label" id="item-name">Upcycled Denim Jeans</div>
-            </div>
-
-            <!-- Game Control Buttons -->
-            <div class="controls">
-                <button class="game-btn" onclick="nextPiece()">Next Piece ↻</button>
-                <button class="game-btn" onclick="stylePiece()">Style This Look ✨</button>
-                <button class="game-btn" onclick="randomize()">Random Outfit 🎲</button>
-            </div>
+    <!-- 3 Cards Block -->
+    <section class="main-container">
+        <div class="card">
+            <img src="icon1.jpeg" alt="Journey">
+            <h3>Journey</h3>
+            <p>Exploring sustainable fashion and building conscious clothing habits step by step.</p>
         </div>
+        <div class="card">
+            <img src="icon2.jpeg" alt="Concept">
+            <h3>Concept</h3>
+            <p>Redefining style through upcycling, minimal footprint, and long-lasting design.</p>
+        </div>
+        <div class="card">
+            <img src="icon3.jpeg" alt="Your Role">
+            <h3>Your Role</h3>
+            <p>Join the movement, customize your fits, and shape the future of sustainable culture.</p>
+        </div>
+    </section>
 
-        <div class="score-board">
-            Styled Outfits: <span id="outfit-count">0</span>
+    <!-- Game Section -->
+    <section class="game-section">
+        <h2 class="game-title">RALLI Studio Game</h2>
+        <p class="game-desc">Mix and match sustainable pieces to create your custom look</p>
+
+        <div class="game-box">
+            <div class="game-display">
+                <img id="game-img" src="jeans-box.png" alt="Piece Display">
+                <div class="item-title" id="game-item-name">Upcycled Denim Jeans</div>
+            </div>
+            <div class="game-actions">
+                <button class="game-btn" onclick="nextItem()">Next Item ↻</button>
+                <button class="game-btn" onclick="selectItem()">Select Fit ✨</button>
+            </div>
         </div>
     </section>
 
     <script>
-        // Item collection based on files in repository
-        const inventory = [
+        const items = [
             { name: "Upcycled Denim Jeans", img: "jeans-box.png" },
             { name: "Vintage Newspaper Top", img: "newspaper-box.png" },
-            { name: "Eco Combo Set", img: "combo-box.png" },
-            { name: "Mannequin Display Piece", img: "mannequin-view.png" },
+            { name: "Eco Combo Pack", img: "combo-box.png" },
+            { name: "Mannequin Outfit", img: "mannequin-view.png" },
             { name: "RALLI Pick Box", img: "pickabox.jpeg" }
         ];
 
-        let currentIndex = 0;
-        let count = 0;
+        let index = 0;
 
-        function updateDisplay() {
-            const item = inventory[currentIndex];
-            document.getElementById('outfit-img').src = item.img;
-            document.getElementById('item-name').innerText = item.name;
+        function nextItem() {
+            index = (index + 1) % items.length;
+            document.getElementById('game-img').src = items[index].img;
+            document.getElementById('game-item-name').innerText = items[index].name;
         }
 
-        function nextPiece() {
-            currentIndex = (currentIndex + 1) % inventory.length;
-            updateDisplay();
-        }
-
-        function stylePiece() {
-            count++;
-            document.getElementById('outfit-count').innerText = count;
-            alert('Styled! Added ' + inventory[currentIndex].name + ' to your collection.');
-        }
-
-        function randomize() {
-            currentIndex = Math.floor(Math.random() * inventory.length);
-            updateDisplay();
+        function selectItem() {
+            alert("Selected: " + items[index].name + " for your RALLI look!");
         }
     </script>
+
 </body>
 </html>
