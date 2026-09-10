@@ -35,8 +35,12 @@
             padding: 20px;
         }
 
-        /* Forces full stop to stay on the right side */
+        /* Flex container forcing Left-to-Right layout */
         #brand-logo {
+            display: inline-flex;
+            flex-direction: row !important;
+            align-items: center;
+            justify-content: center;
             font-family: 'Noto Nastaliq Urdu', serif;
             font-size: 9.5rem;
             font-weight: 600;
@@ -51,16 +55,27 @@
             transform: translate(-50%, -50%);
             transition: opacity 0.4s ease, transform 0.4s ease;
             z-index: 2;
-            text-align: center;
             white-space: nowrap;
-            direction: ltr; /* Keeps full stop on the far right */
-            display: inline-block;
+            direction: ltr !important;
         }
 
         #brand-logo.hidden {
             opacity: 0;
             transform: translate(-50%, -55%) scale(0.95);
             pointer-events: none;
+        }
+
+        /* Explicitly force word to render right-to-left internally */
+        .urdu-text {
+            direction: rtl;
+            display: inline-block;
+        }
+
+        /* Explicitly lock full stop to the far right */
+        .full-stop {
+            direction: ltr;
+            display: inline-block;
+            margin-left: 2px;
         }
 
         .icon-menu-row {
@@ -174,7 +189,9 @@
 <body>
 
     <div class="section-view">
-        <h1 id="brand-logo" onclick="revealDashboard()">&#x200E;رَلی.</h1>
+        <h1 id="brand-logo" onclick="revealDashboard()">
+            <span class="urdu-text">رَلی</span><span class="full-stop">.</span>
+        </h1>
 
         <div class="icon-menu-row" id="menu-row">
             <div class="icon-wrapper">
