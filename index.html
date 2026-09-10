@@ -6,7 +6,7 @@
     <title>RALLI</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
     
     <style>
         * {
@@ -18,41 +18,42 @@
         html, body {
             width: 100%;
             height: 100%;
-            background-color: #F3E6BD; /* Pearl Beige */
-            font-family: 'Playfair Display', Georgia, serif;
+            background-color: #F9F6F0; /* Refined Warm Ecru */
+            font-family: 'Bodoni Moda', Georgia, serif;
             -webkit-font-smoothing: antialiased;
-            color: #260808; /* Graphite */
-            overflow: hidden;
+            color: #1A1A1A; /* Charcoal Black */
+            overflow-x: hidden;
         }
 
-        /* Full Screen Container - Perfectly Centered Grid */
+        /* Full Screen Container */
         .section-view {
             width: 100vw;
-            height: 100vh;
+            min-height: 100vh;
             display: grid;
             place-items: center;
             position: relative;
-            padding: 20px;
+            padding: 40px 20px;
         }
 
-        /* Perfectly Centered Logo */
+        /* Chic High-Fashion Logo */
         #brand-logo {
-            font-size: 5.5rem;
+            font-family: 'Bodoni Moda', Georgia, serif;
+            font-size: 6rem;
             font-weight: 500;
-            letter-spacing: 6px;
+            letter-spacing: 12px;
             text-transform: uppercase;
             margin: 0;
             cursor: pointer;
             user-select: none;
             opacity: 1;
             grid-area: 1 / 1;
-            transition: opacity 0.4s ease, transform 0.4s ease;
+            transition: opacity 0.5s ease, transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
             z-index: 2;
         }
 
         #brand-logo.hidden {
             opacity: 0;
-            transform: scale(0.95);
+            transform: scale(0.96);
             pointer-events: none;
         }
 
@@ -60,11 +61,11 @@
         .icon-menu-row {
             grid-area: 1 / 1;
             display: flex;
-            width: 96%;
-            max-width: 1600px;
+            width: 90%;
+            max-width: 1400px;
             justify-content: center;
             align-items: center;
-            gap: 4%;
+            gap: 5%;
             opacity: 0;
             transform: translateY(20px);
             pointer-events: none;
@@ -82,57 +83,95 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 20px;
+            gap: 24px;
             flex: 1;
-            max-width: 440px;
+            max-width: 400px;
             text-decoration: none;
-            color: #260808;
+            color: #1A1A1A;
             cursor: pointer;
         }
 
         .icon-square {
             width: 100%;
             aspect-ratio: 1 / 1;
-            border: 1px solid rgba(38, 8, 8, 0.2);
-            background-color: rgba(38, 8, 8, 0.02);
+            border: 1px solid rgba(26, 26, 26, 0.12);
+            background-color: #FFFFFF;
             overflow: hidden;
-            box-shadow: 0 15px 35px rgba(38, 8, 8, 0.05);
-            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.4s ease, box-shadow 0.4s ease;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
+            transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.4s ease, box-shadow 0.4s ease;
         }
 
         .icon-square img {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            transition: transform 0.5s ease;
+            filter: grayscale(15%) contrast(102%);
+            transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), filter 0.4s ease;
         }
 
         .icon-label {
             font-family: 'Montserrat', sans-serif;
-            font-size: 0.95rem;
+            font-size: 0.85rem;
             font-weight: 400;
-            letter-spacing: 2px;
-            opacity: 0.7;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            opacity: 0.75;
             transition: opacity 0.3s ease, letter-spacing 0.3s ease;
         }
 
+        /* Hover Interaction */
         .icon-wrapper:hover .icon-square {
-            transform: translateY(-8px) scale(1.02);
-            border-color: #260808;
-            box-shadow: 0 25px 50px rgba(38, 8, 8, 0.1);
-        }
-        .icon-wrapper:hover .icon-square img {
-            transform: scale(1.05);
-        }
-        .icon-wrapper:hover .icon-label {
-            opacity: 1;
-            letter-spacing: 3px;
+            transform: translateY(-8px);
+            border-color: rgba(26, 26, 26, 0.4);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.07);
         }
 
+        .icon-wrapper:hover .icon-square img {
+            transform: scale(1.04);
+            filter: grayscale(0%) contrast(100%);
+        }
+
+        .icon-wrapper:hover .icon-label {
+            opacity: 1;
+            letter-spacing: 4px;
+        }
+
+        /* ----------------------------------
+           MOBILE RESPONSIVE
+        ---------------------------------- */
         @media (max-width: 768px) {
-            #brand-logo { font-size: 3.5rem; }
-            .icon-menu-row { width: 95%; gap: 15px; }
-            .icon-label { font-size: 0.75rem; }
+            html, body {
+                overflow-y: auto;
+            }
+
+            .section-view {
+                padding: 60px 24px;
+                min-height: 100vh;
+                height: auto;
+            }
+
+            #brand-logo { 
+                font-size: 3.5rem;
+                letter-spacing: 6px;
+            }
+
+            .icon-menu-row { 
+                flex-direction: column;
+                width: 100%;
+                gap: 40px;
+                padding: 20px 0;
+            }
+
+            .icon-wrapper {
+                width: 100%;
+                max-width: 300px;
+                gap: 16px;
+            }
+
+            .icon-label { 
+                font-size: 0.8rem; 
+                letter-spacing: 2px;
+            }
         }
     </style>
 </head>
