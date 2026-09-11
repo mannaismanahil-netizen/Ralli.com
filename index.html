@@ -35,10 +35,10 @@
             padding: 20px;
         }
 
-        /* Flex container forcing Left-to-Right layout */
+        /* Fixed Centered Logo Box */
         #brand-logo {
-            display: inline-flex;
-            flex-direction: row !important;
+            display: flex !important;
+            flex-direction: row-reverse !important; /* Reverses RTL rendering force */
             align-items: center;
             justify-content: center;
             font-family: 'Noto Nastaliq Urdu', serif;
@@ -56,7 +56,6 @@
             transition: opacity 0.4s ease, transform 0.4s ease;
             z-index: 2;
             white-space: nowrap;
-            direction: ltr !important;
         }
 
         #brand-logo.hidden {
@@ -65,17 +64,15 @@
             pointer-events: none;
         }
 
-        /* Explicitly force word to render right-to-left internally */
-        .urdu-text {
-            direction: rtl;
+        .urdu-word {
             display: inline-block;
         }
 
-        /* Explicitly lock full stop to the far right */
-        .full-stop {
-            direction: ltr;
+        /* Ensures the period is placed on the far left side (true end of Urdu reading flow) */
+        .full-stop-left {
             display: inline-block;
-            margin-left: 2px;
+            font-family: sans-serif; /* Clean dot shape */
+            margin-right: 8px;
         }
 
         .icon-menu-row {
@@ -151,7 +148,8 @@
             letter-spacing: 3px;
         }
 
-        @media (max-width: 768px) {
+        /* Explicit Mobile Styles */
+        @media screen and (max-width: 768px) {
             html, body {
                 overflow-y: auto;
             }
@@ -163,7 +161,11 @@
             }
 
             #brand-logo { 
-                font-size: 5.5rem;
+                font-size: 4.8rem !important; /* Smaller size so it fits mobile screens without clipping */
+            }
+
+            .full-stop-left {
+                margin-right: 4px;
             }
 
             .icon-menu-row { 
@@ -190,7 +192,7 @@
 
     <div class="section-view">
         <h1 id="brand-logo" onclick="revealDashboard()">
-            <span class="urdu-text">رَلی</span><span class="full-stop">.</span>
+            <span class="full-stop-left">.</span><span class="urdu-word">رَلی</span>
         </h1>
 
         <div class="icon-menu-row" id="menu-row">
