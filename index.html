@@ -6,7 +6,7 @@
     <title>RALLI</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu:wght@400;500;700&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu:wght@400;500;700&family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
     
     <style>
         * {
@@ -26,7 +26,7 @@
             background-color: #2b1f1d;
             font-family: 'Noto Nastaliq Urdu', serif;
             -webkit-font-smoothing: antialiased;
-            color: #F2E5D0;
+            color: #FAF4E8;
             overflow-x: hidden;
         }
 
@@ -40,10 +40,10 @@
             padding: 20px;
         }
 
-        /* Centered Urdu Logo with Sharp Outline & Contrast */
+        /* Larger Centered Urdu Logo */
         #brand-logo {
             font-family: 'Noto Nastaliq Urdu', serif;
-            font-size: 9.5rem;
+            font-size: 14rem; /* Increased size for impact */
             font-weight: 700;
             line-height: 1;
             margin: 0;
@@ -54,24 +54,20 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            transition: opacity 0.4s ease, transform 0.4s ease;
+            transition: opacity 0.5s ease, transform 0.5s ease;
             z-index: 2;
             white-space: nowrap;
             direction: rtl;
-            color: #FAF4E8; /* Soft warm ivory fill */
-            
-            /* Sharp, crisp outline for legibility over busy photo elements */
-            -webkit-text-stroke: 1.5px #211311; /* Deep henna-toned crisp border */
-            
-            /* Multi-layer shadow for pop and contrast against light and dark areas */
+            color: #FAF4E8;
+            -webkit-text-stroke: 2px #211311;
             text-shadow: 
-                0 0 12px rgba(33, 19, 17, 0.7),
-                0 4px 20px rgba(0, 0, 0, 0.6);
+                0 0 15px rgba(33, 19, 17, 0.8),
+                0 6px 25px rgba(0, 0, 0, 0.7);
         }
 
         #brand-logo.hidden {
             opacity: 0;
-            transform: translate(-50%, -55%) scale(0.95);
+            transform: translate(-50%, -55%) scale(0.92);
             pointer-events: none;
         }
 
@@ -84,7 +80,6 @@
             display: inline-block;
         }
 
-        /* Custom dot matched to the henna-tone stroke and shadow */
         .custom-dot {
             position: absolute;
             bottom: 0.18em;
@@ -92,29 +87,39 @@
             width: 0.11em;
             height: 0.11em;
             background-color: #FAF4E8;
-            border: 1.5px solid #211311;
+            border: 2px solid #211311;
             border-radius: 2px;
-            box-shadow: 0 0 8px rgba(33, 19, 17, 0.7);
+            box-shadow: 0 0 10px rgba(33, 19, 17, 0.8);
         }
 
-        /* Card Menu overlay styled to harmonize with background */
+        /* High-Contrast Standout Menu Row */
         .icon-menu-row {
             display: flex;
-            width: 96%;
-            max-width: 1600px;
+            width: 92%;
+            max-width: 1400px;
             justify-content: center;
             align-items: center;
-            gap: 4%;
+            gap: 5%;
+            padding: 40px 30px;
+            border-radius: 24px;
+            
+            /* Dark blur overlay to isolate cards from background */
+            background-color: rgba(20, 10, 9, 0.55);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(250, 244, 232, 0.15);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
+
             opacity: 0;
-            transform: translateY(20px);
+            transform: translateY(30px) scale(0.98);
             pointer-events: none;
-            transition: opacity 0.8s ease 0.1s, transform 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.1s;
+            transition: opacity 0.8s ease 0.15s, transform 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.15s;
             z-index: 1;
         }
 
         .icon-menu-row.visible {
             opacity: 1;
-            transform: translateY(0);
+            transform: translateY(0) scale(1);
             pointer-events: auto;
         }
 
@@ -122,9 +127,9 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 20px;
+            gap: 18px;
             flex: 1;
-            max-width: 440px;
+            max-width: 380px;
             text-decoration: none;
             color: #FAF4E8;
             cursor: pointer;
@@ -133,11 +138,11 @@
         .icon-square {
             width: 100%;
             aspect-ratio: 1 / 1;
-            border: 1px solid rgba(250, 244, 232, 0.3);
-            background-color: rgba(33, 19, 17, 0.4);
-            backdrop-filter: blur(8px);
+            border: 1.5px solid rgba(250, 244, 232, 0.35);
+            background-color: rgba(0, 0, 0, 0.25);
+            border-radius: 12px;
             overflow: hidden;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
             transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.4s ease, box-shadow 0.4s ease;
         }
 
@@ -148,29 +153,40 @@
             transition: transform 0.5s ease;
         }
 
+        /* Sharper, Bold Titles */
         .icon-label {
             font-family: 'Montserrat', sans-serif;
-            font-size: 0.95rem;
-            font-weight: 500;
-            letter-spacing: 2px;
-            opacity: 0.85;
-            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
-            transition: opacity 0.3s ease, letter-spacing 0.3s ease;
+            font-size: 1.05rem;
+            font-weight: 600; /* Bold weight for sharpness */
+            letter-spacing: 2.5px;
+            text-transform: uppercase;
+            opacity: 0.95;
+            color: #FFFFFF;
+            text-shadow: 0 2px 6px rgba(0, 0, 0, 0.8); /* Sharp text depth */
+            transition: opacity 0.3s ease, letter-spacing 0.3s ease, color 0.3s ease;
         }
 
         .icon-wrapper:hover .icon-square {
-            transform: translateY(-8px) scale(1.02);
+            transform: translateY(-8px) scale(1.03);
             border-color: #FAF4E8;
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
         }
 
         .icon-wrapper:hover .icon-square img {
-            transform: scale(1.05);
+            transform: scale(1.06);
         }
 
         .icon-wrapper:hover .icon-label {
             opacity: 1;
-            letter-spacing: 3px;
+            letter-spacing: 3.5px;
+            color: #FFF6E5;
+        }
+
+        /* Responsive Breakpoints */
+        @media (max-width: 1024px) {
+            #brand-logo { 
+                font-size: 10rem; 
+            }
         }
 
         @media (max-width: 768px) {
@@ -179,37 +195,38 @@
             }
 
             .section-view {
-                padding: 40px 20px;
+                padding: 30px 15px;
                 min-height: 100vh;
                 height: auto;
             }
 
             #brand-logo { 
-                font-size: 5rem;
-                -webkit-text-stroke: 1.2px #211311;
+                font-size: 7rem !important; /* Prominent size on mobile screens */
+                -webkit-text-stroke: 1.5px #211311;
             }
 
             .custom-dot {
-                left: -0.25em;
-                bottom: 0.15em;
-                border-width: 1.2px;
+                left: -0.24em;
+                bottom: 0.16em;
+                border-width: 1.5px;
             }
 
             .icon-menu-row { 
                 flex-direction: column;
                 width: 100%;
-                gap: 30px;
-                padding: 40px 0;
+                gap: 28px;
+                padding: 30px 20px;
+                border-radius: 18px;
             }
 
             .icon-wrapper {
                 width: 100%;
-                max-width: 320px;
+                max-width: 300px;
                 gap: 12px;
             }
 
             .icon-label { 
-                font-size: 0.85rem; 
+                font-size: 0.9rem; 
                 letter-spacing: 2px;
             }
         }
