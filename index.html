@@ -40,10 +40,10 @@
             padding: 20px;
         }
 
-        /* Larger Centered Urdu Logo */
+        /* Large Centered Logo */
         #brand-logo {
             font-family: 'Noto Nastaliq Urdu', serif;
-            font-size: 14rem; /* Increased size for impact */
+            font-size: 14rem;
             font-weight: 700;
             line-height: 1;
             margin: 0;
@@ -80,6 +80,7 @@
             display: inline-block;
         }
 
+        /* Custom dot positioned clearly to the far left */
         .custom-dot {
             position: absolute;
             bottom: 0.18em;
@@ -92,23 +93,22 @@
             box-shadow: 0 0 10px rgba(33, 19, 17, 0.8);
         }
 
-        /* High-Contrast Standout Menu Row */
+        /* High-Contrast Standout Menu Container */
         .icon-menu-row {
             display: flex;
-            width: 92%;
-            max-width: 1400px;
+            width: 96%;
+            max-width: 1600px;
             justify-content: center;
             align-items: center;
-            gap: 5%;
-            padding: 40px 30px;
-            border-radius: 24px;
+            gap: 4%;
+            padding: 50px 40px;
+            border-radius: 28px;
             
-            /* Dark blur overlay to isolate cards from background */
-            background-color: rgba(20, 10, 9, 0.55);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(250, 244, 232, 0.15);
-            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
+            background-color: rgba(20, 10, 9, 0.65);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(250, 244, 232, 0.2);
+            box-shadow: 0 35px 70px rgba(0, 0, 0, 0.6);
 
             opacity: 0;
             transform: translateY(30px) scale(0.98);
@@ -123,13 +123,14 @@
             pointer-events: auto;
         }
 
+        /* Scaled-Up Icon Cards */
         .icon-wrapper {
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 18px;
+            gap: 22px;
             flex: 1;
-            max-width: 380px;
+            max-width: 480px;
             text-decoration: none;
             color: #FAF4E8;
             cursor: pointer;
@@ -138,11 +139,11 @@
         .icon-square {
             width: 100%;
             aspect-ratio: 1 / 1;
-            border: 1.5px solid rgba(250, 244, 232, 0.35);
-            background-color: rgba(0, 0, 0, 0.25);
-            border-radius: 12px;
+            border: 2px solid rgba(250, 244, 232, 0.4);
+            background-color: rgba(0, 0, 0, 0.3);
+            border-radius: 16px;
             overflow: hidden;
-            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
             transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.4s ease, box-shadow 0.4s ease;
         }
 
@@ -153,23 +154,23 @@
             transition: transform 0.5s ease;
         }
 
-        /* Sharper, Bold Titles */
+        /* Sharp Bold Titles */
         .icon-label {
             font-family: 'Montserrat', sans-serif;
-            font-size: 1.05rem;
-            font-weight: 600; /* Bold weight for sharpness */
-            letter-spacing: 2.5px;
+            font-size: 1.15rem;
+            font-weight: 700;
+            letter-spacing: 3px;
             text-transform: uppercase;
             opacity: 0.95;
             color: #FFFFFF;
-            text-shadow: 0 2px 6px rgba(0, 0, 0, 0.8); /* Sharp text depth */
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.9);
             transition: opacity 0.3s ease, letter-spacing 0.3s ease, color 0.3s ease;
         }
 
         .icon-wrapper:hover .icon-square {
-            transform: translateY(-8px) scale(1.03);
+            transform: translateY(-10px) scale(1.03);
             border-color: #FAF4E8;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.7);
         }
 
         .icon-wrapper:hover .icon-square img {
@@ -178,7 +179,7 @@
 
         .icon-wrapper:hover .icon-label {
             opacity: 1;
-            letter-spacing: 3.5px;
+            letter-spacing: 4px;
             color: #FFF6E5;
         }
 
@@ -186,6 +187,9 @@
         @media (max-width: 1024px) {
             #brand-logo { 
                 font-size: 10rem; 
+            }
+            .icon-wrapper {
+                max-width: 380px;
             }
         }
 
@@ -201,7 +205,7 @@
             }
 
             #brand-logo { 
-                font-size: 7rem !important; /* Prominent size on mobile screens */
+                font-size: 7rem !important;
                 -webkit-text-stroke: 1.5px #211311;
             }
 
@@ -214,20 +218,20 @@
             .icon-menu-row { 
                 flex-direction: column;
                 width: 100%;
-                gap: 28px;
-                padding: 30px 20px;
-                border-radius: 18px;
+                gap: 35px;
+                padding: 35px 20px;
+                border-radius: 20px;
             }
 
             .icon-wrapper {
                 width: 100%;
-                max-width: 300px;
-                gap: 12px;
+                max-width: 360px;
+                gap: 14px;
             }
 
             .icon-label { 
-                font-size: 0.9rem; 
-                letter-spacing: 2px;
+                font-size: 1rem; 
+                letter-spacing: 2.5px;
             }
         }
     </style>
@@ -243,13 +247,15 @@
         </h1>
 
         <div class="icon-menu-row" id="menu-row">
+            <!-- Icon 1: Replace 'your-new-image.jpg' with your desired image path -->
             <div class="icon-wrapper">
                 <div class="icon-square">
-                    <img src="icon1.jpeg" alt="Journey">
+                    <img src="your-new-image.jpg" alt="Journey">
                 </div>
                 <span class="icon-label">Journey</span>
             </div>
 
+            <!-- Icon 2 -->
             <div class="icon-wrapper">
                 <div class="icon-square">
                     <img src="icon3.jpg" alt="Concept">
@@ -257,6 +263,7 @@
                 <span class="icon-label">Concept</span>
             </div>
 
+            <!-- Icon 3 -->
             <div class="icon-wrapper">
                 <div class="icon-square">
                     <img src="IMG_9022.jpeg" alt="Your Role">
