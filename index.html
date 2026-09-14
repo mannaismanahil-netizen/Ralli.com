@@ -6,7 +6,7 @@
     <title>RALLI</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu:wght@400;500;700&family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu:wght@400;500;700&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
     
     <style>
         * {
@@ -24,7 +24,7 @@
             background-repeat: no-repeat;
             background-attachment: fixed;
             background-color: #2b1f1d;
-            font-family: 'Noto Nastaliq Urdu', serif;
+            font-family: 'Montserrat', sans-serif;
             -webkit-font-smoothing: antialiased;
             color: #FAF4E8;
             overflow-x: hidden;
@@ -183,6 +183,111 @@
             color: #FFF6E5;
         }
 
+        /* Modal Overlay & Card Styling */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(10, 5, 4, 0.85);
+            backdrop-filter: blur(15px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.4s ease;
+            padding: 20px;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-content {
+            background-color: rgba(25, 15, 14, 0.95);
+            border: 1px solid rgba(250, 244, 232, 0.3);
+            border-radius: 24px;
+            max-width: 900px;
+            width: 100%;
+            max-height: 85vh;
+            overflow-y: auto;
+            padding: 40px;
+            position: relative;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.8);
+            transform: translateY(20px);
+            transition: transform 0.4s ease;
+        }
+
+        .modal-overlay.active .modal-content {
+            transform: translateY(0);
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 20px;
+            right: 25px;
+            background: none;
+            border: none;
+            color: #FAF4E8;
+            font-size: 2rem;
+            cursor: pointer;
+            line-height: 1;
+            opacity: 0.7;
+            transition: opacity 0.2s ease;
+        }
+
+        .close-btn:hover {
+            opacity: 1;
+        }
+
+        .modal-title {
+            font-size: 2rem;
+            font-weight: 700;
+            letter-spacing: 3px;
+            margin-bottom: 20px;
+            color: #FAF4E8;
+            border-bottom: 1px solid rgba(250, 244, 232, 0.2);
+            padding-bottom: 10px;
+        }
+
+        .modal-paragraph {
+            font-size: 1.05rem;
+            line-height: 1.7;
+            color: #E2D9CC;
+            margin-bottom: 30px;
+            font-weight: 400;
+        }
+
+        /* Picture Showcase Grid */
+        .image-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+        }
+
+        .image-card {
+            aspect-ratio: 4 / 3;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid rgba(250, 244, 232, 0.2);
+            background: rgba(0, 0, 0, 0.4);
+        }
+
+        .image-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.4s ease;
+        }
+
+        .image-card:hover img {
+            transform: scale(1.05);
+        }
+
         /* Responsive Breakpoints */
         @media (max-width: 1024px) {
             #brand-logo { 
@@ -233,6 +338,10 @@
                 font-size: 1rem; 
                 letter-spacing: 2.5px;
             }
+
+            .modal-content {
+                padding: 25px 20px;
+            }
         }
     </style>
 </head>
@@ -247,8 +356,8 @@
         </h1>
 
         <div class="icon-menu-row" id="menu-row">
-            <!-- Position 1: Journey -->
-            <div class="icon-wrapper">
+            <!-- Position 1: Journey (Triggers Popup) -->
+            <div class="icon-wrapper" onclick="openJourneyModal()">
                 <div class="icon-square">
                     <img src="icon3.jpg" alt="Journey">
                 </div>
@@ -273,6 +382,30 @@
         </div>
     </div>
 
+    <!-- JOURNEY MODAL POPUP -->
+    <div class="modal-overlay" id="journey-modal">
+        <div class="modal-content">
+            <button class="close-btn" onclick="closeJourneyModal()">&times;</button>
+            <h2 class="modal-title">THE JOURNEY</h2>
+            <p class="modal-paragraph">
+                RALLI began in 2024 with a bold mission: turning forgotten materials into conscious design. We debuted our concept at the Innovation Spark 2024 competition, featuring five distinct garments crafted entirely from reclaimed fabrics alongside a statement dress built from recycled newspaper. Driven by a clear vision to redefine sustainable fashion, our presentation earned first place—igniting a commitment to take this movement even further.
+            </p>
+            
+            <!-- Picture Grid using your uploaded file names -->
+            <div class="image-grid">
+                <div class="image-card">
+                    <img src="sitting.JPG" alt="Sitting showcase">
+                </div>
+                <div class="image-card">
+                    <img src="paperbag.jpg" alt="Paper bag design showcase">
+                </div>
+                <div class="image-card">
+                    <img src="Screenshot 2026-09-14 8.20.23 AM.png" alt="Innovation Spark entry showcase">
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
         function revealDashboard() {
             const logo = document.getElementById('brand-logo');
@@ -280,6 +413,14 @@
 
             logo.classList.add('hidden');
             menuRow.classList.add('visible');
+        }
+
+        function openJourneyModal() {
+            document.getElementById('journey-modal').classList.add('active');
+        }
+
+        function closeJourneyModal() {
+            document.getElementById('journey-modal').classList.remove('active');
         }
     </script>
 
